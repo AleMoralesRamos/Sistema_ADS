@@ -2,13 +2,13 @@
 -- SISTEMA ESCOLAR - ESTRUCTURA DE BASE DE DATOS
 -- ============================================
 
--- Eliminar tablas si existen (opcional, quita el comentario si quieres empezar fresco)
+-- Eliminar tablas si existen
 DROP TABLE IF EXISTS mensajes;
 DROP TABLE IF EXISTS calendario_eventos;
 DROP TABLE IF EXISTS horarios;
 
 -- Tabla de horarios
-CREATE TABLE IF NOT EXISTS horarios (
+CREATE TABLE horarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     dia VARCHAR(20) NOT NULL,
     ini TIME NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS horarios (
 );
 
 -- Tabla de eventos del calendario
-CREATE TABLE IF NOT EXISTS calendario_eventos (
+CREATE TABLE calendario_eventos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fecha DATE NOT NULL,
     evento VARCHAR(255) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS calendario_eventos (
 );
 
 -- Tabla de mensajes
-CREATE TABLE IF NOT EXISTS mensajes (
+CREATE TABLE mensajes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     remitente_nombre VARCHAR(100),
     destinatario_tipo VARCHAR(50),

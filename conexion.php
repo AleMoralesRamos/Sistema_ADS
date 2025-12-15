@@ -1,15 +1,19 @@
 <?php
 $servidor = "localhost";
 $usuario = "root";
-$password = "";
+$password = "";  // Vacío en Linux si no configuraste contraseña
 $base_datos = "sistema_escolar";
 
-$conn = new mysqli($servidor, $usuario, $password, $base_datos);
+// Conectar a MySQL (sin especificar base de datos)
+$conn = new mysqli($servidor, $usuario, $password);
 
 if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
+    die("❌ Error de conexión MySQL: " . $conn->connect_error);
 }
 
-// No crea tablas, solo conecta
-// echo "✅ Conectado a $base_datos";
+// Seleccionar la base de datos (crearla si no existe)
+$conn->query("CREATE DATABASE IF NOT EXISTS $base_datos");
+$conn->select_db($base_datos);
+
+// echo "✅ Conectado a MySQL";
 ?>
