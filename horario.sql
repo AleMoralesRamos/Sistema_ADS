@@ -27,7 +27,7 @@ CREATE TABLE mensajes
 );
 
 --PRUEBAS
-INSERT INTO horarios (dia, hora_inicio, hora_fin, materia, profesor) VALUES 
+INSERT INTO horarios (dia, ini, fin, materia, profesor) VALUES 
 ('Lunes', '08:00', '09:00', 'Matemáticas', 'Prof. Jirafales'),
 ('Lunes', '09:00', '10:00', 'Historia', 'Prof. X');
 
