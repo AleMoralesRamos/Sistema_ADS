@@ -1,4 +1,5 @@
 <?php
+    include 'conexion.php';
     $cons_horario = "SELECT*FROM horarios ORDER BY dia, inicio";
     $res_horario = $conn->query($cons_horario);
 
