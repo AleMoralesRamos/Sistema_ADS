@@ -1,4 +1,12 @@
 <?php
-$conn = new mysqli("localhost", "root", "tu_contraseña", "nombre_de_tu_base_datos");
-if ($conn->connect_error) { die("Fallo conexion: " . $conn->connect_error); }
+$servidor = "localhost";
+$usuario = "root";
+$password = "TU_CONTRASEÑA"; 
+$base_datos = "sistema_escolar"; 
+
+$conn = new mysqli($servidor, $usuario, $password, $base_datos);
+
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
 ?>
