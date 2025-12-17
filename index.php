@@ -28,6 +28,7 @@ include 'conexion.php';
             <a href="index.php">🏠 Inicio</a>
             <a href="horario.php">📅 Horario</a>
             <a href="informacion.php">✉️ Contactar Escuela</a>
+            <a href="contacto.php">🚨 Gestión de contactos de emergencia</a>
         </div>
         
         <div class="card">
@@ -50,6 +51,12 @@ include 'conexion.php';
                     <h4>Comunicación</h4>
                     <p>Contacta con la escuela</p>
                     <a href="informacion.php">Enviar Mensaje</a>
+                </div>
+                <div class="stat-box">
+                    <h3>✉️</h3>
+                    <h4>Contacto de Emergencia</h4>
+                    <p>Agrega un contacto de emergencia</p>
+                    <a href="contacto.php">Gestiona un contacto de emergencia</a>
                 </div>
             </div>
         </div>

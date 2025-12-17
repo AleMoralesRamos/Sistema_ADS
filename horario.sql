@@ -1,11 +1,9 @@
--- ============================================
--- SISTEMA ESCOLAR - ESTRUCTURA DE BASE DE DATOS
--- ============================================
 
 -- Eliminar tablas si existen
 DROP TABLE IF EXISTS mensajes;
 DROP TABLE IF EXISTS calendario_eventos;
 DROP TABLE IF EXISTS horarios;
+DROP TABLE IF EXISTS contactos_emergencia;
 
 -- Tabla de horarios
 CREATE TABLE horarios (
@@ -33,6 +31,16 @@ CREATE TABLE mensajes (
     asunto VARCHAR(150),
     mensaje TEXT,
     fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de contactos de emergencia
+CREATE TABLE IF NOT EXISTS contactos_emergencia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,  -- Para cuando tengas sistema de usuarios
+    nombre_completo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    parentesco VARCHAR(30) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ============================================
