@@ -83,24 +83,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         $count_sql = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = $id_usuario";
         $count_result = $conn->query($count_sql);
         $count_row = $count_result->fetch_assoc();
-        if ($count_row['total'] >= $limite_contactos) {
+        if ($count_row['total'] >= $limite_contactos) 
+        {
             $error = $MSG5;
         }
     }
     
     // Si no hay errores, guardar en base de datos
-    if (empty($error)) {
+    if (empty($error)) 
+    {
         // Escapar datos para seguridad
         $nombre_esc = $conn->real_escape_string($nombre);
         $telefono_esc = $conn->real_escape_string($telefono);
         $parentesco_esc = $conn->real_escape_string($parentesco);
         
-        if ($id_contacto == 0) {
-            // NUEVO CONTACTO
+        if ($id_contacto == 0) 
+        {
+            // Nuevo contactos
             $sql = "INSERT INTO contactos_emergencia (id_usuario, nombre_completo, telefono, parentesco) 
                     VALUES ($id_usuario, '$nombre_esc', '$telefono_esc', '$parentesco_esc')";
-        } else {
-            // ACTUALIZAR CONTACTO
+        } 
+        else 
+        {
+            // Actualizar
             $sql = "UPDATE contactos_emergencia 
                     SET nombre_completo = '$nombre_esc', 
                         telefono = '$telefono_esc', 
@@ -108,7 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     WHERE id = $id_contacto AND id_usuario = $id_usuario";
         }
         
-        if ($conn->query($sql) === TRUE) {
+        if ($conn->query($sql) === TRUE) 
+        {
             $mensaje = $MSG1;
             $tipo_mensaje = 'success';
             
@@ -121,40 +127,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             // Recargar contactos
             header("Location: contacto.php?msg=guardado");
             exit();
-        } else {
+        } 
+        else 
+        {
             $error = "Error en la base de datos: " . $conn->error;
         }
     }
     
     // Si hay error, mostrar mensaje
-    if (!empty($error)) {
+    if (!empty($error)) 
+    {
         $mensaje = $error;
         $tipo_mensaje = 'error';
     }
 }
 
-// ============================================
-// PROCESAR ELIMINACIÓN
-// ============================================
-if (isset($_GET['eliminar'])) {
+//Eliminar
+if (isset($_GET['eliminar'])) 
+{
     $id_eliminar = intval($_GET['eliminar']);
     
     $sql = "DELETE FROM contactos_emergencia WHERE id = $id_eliminar AND id_usuario = $id_usuario";
-    if ($conn->query($sql) === TRUE) {
+    if ($conn->query($sql) === TRUE) 
+    {
         header("Location: contacto.php?msg=eliminado");
         exit();
     }
 }
 
-// ============================================
-// CARGAR CONTACTO PARA EDITAR
-// ============================================
-if (isset($_GET['editar'])) {
+//Editar
+if (isset($_GET['editar'])) 
+{
     $id_editar = intval($_GET['editar']);
     
     $sql = "SELECT * FROM contactos_emergencia WHERE id = $id_editar AND id_usuario = $id_usuario";
     $result = $conn->query($sql);
-    if ($result && $result->num_rows == 1) {
+    if ($result && $result->num_rows == 1) 
+    {
         $contacto = $result->fetch_assoc();
         $nombre = $contacto['nombre_completo'];
         $telefono = $contacto['telefono'];
@@ -163,15 +172,15 @@ if (isset($_GET['editar'])) {
     }
 }
 
-// ============================================
-// CARGAR CONTACTO PARA COPIAR
-// ============================================
-if (isset($_GET['copiar'])) {
+//Copiar
+if (isset($_GET['copiar'])) 
+{
     $id_copiar = intval($_GET['copiar']);
     
     $sql = "SELECT * FROM contactos_emergencia WHERE id = $id_copiar AND id_usuario = $id_usuario";
     $result = $conn->query($sql);
-    if ($result && $result->num_rows == 1) {
+    if ($result && $result->num_rows == 1) 
+    {
         $contacto = $result->fetch_assoc();
         $nombre = $contacto['nombre_completo'] . ' (copia)';
         $telefono = $contacto['telefono'];
@@ -180,22 +189,22 @@ if (isset($_GET['copiar'])) {
     }
 }
 
-// ============================================
-// VERIFICAR LÍMITE DE CONTACTOS
-// ============================================
+//verifica el limite de contacto
 $sql_count = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = $id_usuario";
 $result_count = $conn->query($sql_count);
 $row_count = $result_count->fetch_assoc();
 $total_contactos = $row_count['total'];
 
-// ============================================
-// MOSTRAR MENSAJES DE URL
-// ============================================
-if (isset($_GET['msg'])) {
-    if ($_GET['msg'] == 'guardado') {
+//muestra mensaje 
+if (isset($_GET['msg'])) 
+{
+    if ($_GET['msg'] == 'guardado') 
+    {
         $mensaje = $MSG1;
         $tipo_mensaje = 'success';
-    } elseif ($_GET['msg'] == 'eliminado') {
+    } 
+    elseif ($_GET['msg'] == 'eliminado') 
+    {
         $mensaje = $MSG8;
         $tipo_mensaje = 'success';
     }
@@ -207,7 +216,6 @@ if (isset($_GET['msg'])) {
 <head>
     <title>Gestión de Contactos de Emergencia</title>
     <style>
-        /* Mantén todo el CSS anterior igual */
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
         .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         h1 { color: #333; border-bottom: 2px solid #ff9800; padding-bottom: 10px; }
@@ -247,7 +255,6 @@ if (isset($_GET['msg'])) {
     <div class="container">
         <h1>🚨 Gestión de Contactos de Emergencia</h1>
         
-        <!-- Navegación -->
         <div class="nav">
             <a href="index.php">🏠 Inicio</a>
             <a href="horario.php">📅 Horario</a>
@@ -255,14 +262,12 @@ if (isset($_GET['msg'])) {
             <a href="contacto.php" class="emergencia">🚨 Contacto Emergencia</a>
         </div>
         
-        <!-- Mensajes -->
         <?php if ($mensaje): ?>
             <div class="mensaje-<?php echo $tipo_mensaje; ?>">
                 <?php echo $mensaje; ?>
             </div>
         <?php endif; ?>
         
-        <!-- Límite de contactos -->
         <div class="limite-contactos">
             📊 Contactos registrados: <span><?php echo $total_contactos; ?></span> de <?php echo $limite_contactos; ?> disponibles
             <?php if ($total_contactos >= $limite_contactos): ?>
@@ -270,7 +275,6 @@ if (isset($_GET['msg'])) {
             <?php endif; ?>
         </div>
         
-        <!-- Búsqueda -->
         <div class="busqueda">
             <form method="GET" action="contacto.php">
                 <input type="text" name="busqueda" value="<?php echo htmlspecialchars($busqueda); ?>" 
@@ -282,7 +286,6 @@ if (isset($_GET['msg'])) {
             </form>
         </div>
         
-        <!-- Formulario (visible si hay datos o si se solicita nuevo) -->
         <?php if (!empty($nombre) || isset($_GET['nuevo']) || $id_contacto > 0): ?>
         <div class="form-container" id="formContacto">
             <h3>
@@ -329,7 +332,6 @@ if (isset($_GET['msg'])) {
         </div>
         <?php endif; ?>
         
-        <!-- Botón para nuevo contacto -->
         <?php if ($total_contactos < $limite_contactos && !isset($_GET['nuevo']) && $id_contacto == 0): ?>
         <div class="botones" style="margin: 20px 0;">
             <a href="contacto.php?nuevo=1" class="btn btn-nuevo">
@@ -338,7 +340,6 @@ if (isset($_GET['msg'])) {
         </div>
         <?php endif; ?>
         
-        <!-- Lista de contactos -->
         <div class="contactos-lista">
             <h3>📋 Lista de Contactos de Emergencia</h3>
             
@@ -379,7 +380,7 @@ if (isset($_GET['msg'])) {
     </div>
 
     <script>
-        // Validación en tiempo real del teléfono
+        // Validación del teléfono
         document.getElementById('telefono')?.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length < 10) {
