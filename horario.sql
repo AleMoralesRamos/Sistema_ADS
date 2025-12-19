@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS mensajes;
 DROP TABLE IF EXISTS calendario_eventos;
 DROP TABLE IF EXISTS horarios;
 DROP TABLE IF EXISTS contactos_emergencia;
+DROP TABLE IF EXISTS usuarios;
 
 -- Tabla de horarios
 CREATE TABLE horarios (
@@ -43,6 +44,16 @@ CREATE TABLE IF NOT EXISTS contactos_emergencia (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabla de usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    boleta VARCHAR(100) UNIQUE NOT NULL,
+    contraseña VARCHAR(100) NOT NULL,
+    tipo ENUM('padre', 'admin', 'profesor') DEFAULT 'padre',
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ============================================
 -- DATOS DE PRUEBA
 -- ============================================
@@ -64,3 +75,6 @@ INSERT INTO calendario_eventos (fecha, evento, tipo) VALUES
 -- Mensaje de ejemplo
 INSERT INTO mensajes (remitente_nombre, destinatario_tipo, asunto, mensaje) VALUES 
 ('Juan Pérez', 'Profesor', 'Progreso Académico', 'Buen día, quisiera información sobre el progreso de mi hijo.');
+
+INSERT INTO usuarios (nombre, boleta, contraseña, tipo) VALUES 
+('SantaAnna', '2020123456', '123456', 'padre');

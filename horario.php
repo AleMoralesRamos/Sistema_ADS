@@ -1,4 +1,5 @@
 <?php
+require_once 'verificar.php';
 include 'conexion.php';
 
 $cons_horario = "SELECT * FROM horarios ORDER BY 

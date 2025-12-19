@@ -1,5 +1,13 @@
 <?php
+session_start();
 include 'conexion.php';
+require_once 'verificar.php';
+
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: inicias.php');
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,6 +23,14 @@ include 'conexion.php';
         .card { background: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .stats { display: flex; gap: 20px; }
         .stat-box { flex: 1; text-align: center; padding: 20px; background: #e3f2fd; border-radius: 5px; }
+
+        .user-info {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -22,6 +38,17 @@ include 'conexion.php';
         <header>
             <h1>📚 Sistema de Gestión Escolar</h1>
             <p>Bienvenido al sistema de seguimiento académico</p>
+            <div class="welcome-section">
+                <div class="welcome-message">
+                    👋 ¡Hola, 
+                    <?php 
+                    if (isset($_SESSION['nombre'])) {
+                        echo htmlspecialchars($_SESSION['nombre']);
+                    } else {
+                        echo "Usuario";
+                    }
+                    ?>!
+                </div>
         </header>
         
         <div class="menu">
@@ -29,6 +56,8 @@ include 'conexion.php';
             <a href="horario.php">📅 Horario</a>
             <a href="informacion.php">✉️ Contactar Escuela</a>
             <a href="contacto.php">🚨 Gestión de contactos de emergencia</a>
+            <a href="logout.php" style="background-color: #dc3545;">🚪 Cerrar Sesión</a>
+
         </div>
         
         <div class="card">

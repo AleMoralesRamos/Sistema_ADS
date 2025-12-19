@@ -1,4 +1,5 @@
 <?php
+require_once 'verificar.php';
 include 'conexion.php';
 
 // Inicializar variables
