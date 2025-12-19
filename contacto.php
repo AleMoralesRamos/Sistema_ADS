@@ -2,19 +2,16 @@
 require_once 'verificar.php';
 include 'conexion.php';
 
-// Inicializar variables
 $mensaje = '';
 $tipo_mensaje = '';
 $contactos = [];
 $busqueda = '';
 
-// Datos del formulario
 $nombre = '';
 $telefono = '';
 $parentesco = '';
 $id_contacto = 0;
 
-// Mensajes
 $MSG1 = '✅ Contacto guardado correctamente';
 $MSG2 = '⚠️ Datos incompletos';
 $MSG3 = '❌ Nombre obligatorio';
@@ -26,7 +23,6 @@ $MSG8 = '✅ Contacto eliminado';
 
 $id_usuario = 1;
 
-// Límite de contactos
 $limite_contactos = 5;
 
 if (isset($_GET['buscar']) && !empty($_GET['busqueda'])) 
@@ -90,17 +86,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
     }
     
-    // Si no hay errores, guardar en base de datos
     if (empty($error)) 
     {
-        // Escapar datos para seguridad
         $nombre_esc = $conn->real_escape_string($nombre);
         $telefono_esc = $conn->real_escape_string($telefono);
         $parentesco_esc = $conn->real_escape_string($parentesco);
         
         if ($id_contacto == 0) 
         {
-            // Nuevo contactos
+
             $sql = "INSERT INTO contactos_emergencia (id_usuario, nombre_completo, telefono, parentesco) 
                     VALUES ($id_usuario, '$nombre_esc', '$telefono_esc', '$parentesco_esc')";
         } 
