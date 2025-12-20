@@ -54,6 +54,7 @@ if (!isset($_SESSION['usuario_id'])) {
         <div class="menu">
             <a href="index.php">🏠 Inicio</a>
             <a href="horario.php">📅 Horario</a>
+            <a href="calif.php">📊 Calificaciones</a>
             <a href="informacion.php">✉️ Contactar Escuela</a>
             <a href="contacto.php">🚨 Gestión de contactos de emergencia</a>
             <a href="logout.php" style="background-color: #dc3545;">🚪 Cerrar Sesión</a>
