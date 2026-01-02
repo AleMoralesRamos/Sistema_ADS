@@ -1,19 +1,26 @@
 <?php
-$servidor = "localhost";
-$usuario = "root";
-$password = "";  
-$base_datos = "sistema_escolar";
+// Archivo de conexión a la base de datos - Generado por instalador
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "sistema_escolar";
 
-// Conectar a MySQL 
-$conn = new mysqli($servidor, $usuario, $password);
+// Conexión MySQLi
+$conn = new mysqli($host, $username, $password, $database);
 
+// Verificar conexión
 if ($conn->connect_error) {
-    die("❌ Error de conexión MySQL: " . $conn->connect_error);
+    die("Error de conexión: " . $conn->connect_error);
 }
 
-// Selecciona la base de datos 
-$conn->query("CREATE DATABASE IF NOT EXISTS $base_datos");
-$conn->select_db($base_datos);
+// Configurar charset
+$conn->set_charset("utf8mb4");
 
-// echo "✅ Conectado a MySQL";
+// Conexión PDO (para algunos módulos)
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Error PDO: " . $e->getMessage());
+}
 ?>

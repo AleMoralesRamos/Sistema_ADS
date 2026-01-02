@@ -110,13 +110,13 @@ require('conexion.php');
             <section>
                 <article>
                     <?php
-                    require('../php/tabla.php');
+                    require('tabla.php');
                     ?>
                 </article>
             </section>
         </main>
         
-        <a href="home.php" class="back-link">⬅ Volver al Inicio</a>
+        <a href="index.php" class="back-link">⬅ Volver al Inicio</a>
         
         <footer>
             <p><strong>Sistema Escolar © 2024</strong></p>

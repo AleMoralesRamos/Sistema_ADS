@@ -3,25 +3,26 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    color: #1F2933;
-    background-color: #F5F7FA;
+    color: #000;
+    background-color: #f9f9f9;
 }
 
 h1 {
     text-align: center;
-    color: #1F2933;
+    /*color: #f9f9f9;*/
+    color: #000;
     margin: 10px 0;
 }
 
 h2 {
     text-align: center;
-    color: #3E8E41;
+    color: #5a0e0e;
     margin: 10px 0;
 }
 
 /* Encabezado */
 header {
-    background-color: #4CAF50;
+    background-color: #5a0e0e;
     color: #fff;
     padding: 10px;
     text-align: center;
@@ -43,28 +44,26 @@ main {
     text-align: center;
     font-weight: bold;
     font-size: 1.2em;
-    color: #1F2933;
+    color: #000;
 }
 
-/* Nivel */
 .nivel {
     text-align: center;
     font-weight: bold;
     font-size: 1.2em;
-    color: #1F2933;
+    color: #000;
 }
 
 /* Estilos por semestre */
 .semestre {
-    border: 1px solid #DADADA;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
-    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
     overflow: hidden;
-    background-color: #fff;
 }
 
 .semestre h2 {
-    background-color: #4CAF50;
+    background-color: #5a0e0e;
     color: #fff;
     padding: 8px 0;
     margin: 0;
@@ -73,7 +72,6 @@ main {
     font-size: 1.1em;
 }
 
-/* Wrapper tabla */
 .table-wrapper {
     padding: 10px;
     overflow-x: auto;
@@ -88,48 +86,49 @@ table {
 
 th, td {
     padding: 8px;
-    border: 1px solid #DADADA;
+    border: 1px solid #ccc;
 }
 
 th {
-    background-color: #E7F3FF;
+    background-color: #f0f0f0;
     font-weight: bold;
-    color: #1F2933;
+    color: #000;
     text-transform: uppercase;
 }
 
 tr:nth-child(even) {
-    background-color: #F9FBFD;
+    background-color: #f9f9f9;
 }
 
 tr:nth-child(odd) {
-    background-color: #FFFFFF;
+    background-color: #fff;
 }
 
 /* Colores por estado */
 .aprobada {
-    background-color: #E6F4EA;
-    color: #256029;
+    background-color: #d4edda;
+    color: #155724;
     font-weight: bold;
 }
 
 .reprobada {
-    background-color: #FDECEA;
-    color: #9B1C1C;
+    background-color: #f8d7da;
+    color: #721c24;
     font-weight: bold;
 }
 
 .sin-cursar {
-    background-color: #F5F7FA;
-    color: #6B7280;
+    background-color: #fefefe;
+    color: #6c757d;
     font-style: italic;
 }
 
 /* Footer */
 footer {
-    background-color: #4CAF50;
+    background-color: #5a0e0e;
     color: #fff;
     text-align: center;
     padding: 5px;
     font-size: 0.9em;
 }
+/* punto de retorno
