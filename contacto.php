@@ -1,6 +1,30 @@
 <?php
-require_once 'verificar.php';
+session_start();
 include 'conexion.php';
+
+// 1. SEGURIDAD: Si no está autenticado, lo sacamos
+if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
+    header('Location: inicias.php');
+    exit();
+}
+
+// 2. ID DEL USUARIO: Usamos la boleta de la sesión
+$id_usuario = $_SESSION['boleta'];
+
+// --- AUTO-CORRECCIÓN: CREAR TABLA SI NO EXISTE ---
+// Esto evitará la pantalla blanca si la tabla falta
+$sql_tabla = "CREATE TABLE IF NOT EXISTS contactos_emergencia (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    id_usuario BIGINT(20) NOT NULL,
+    nombre_completo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    parentesco VARCHAR(50) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(boleta) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+$conn->query($sql_tabla);
+// --------------------------------------------------
 
 $mensaje = '';
 $tipo_mensaje = '';
@@ -21,35 +45,36 @@ $MSG6 = '❌ Ya existe este contacto';
 $MSG7 = '¿Estás seguro de eliminar este contacto?';
 $MSG8 = '✅ Contacto eliminado';
 
-$id_usuario = 1;
-
 $limite_contactos = 5;
 
+// Lógica de búsqueda
 if (isset($_GET['buscar']) && !empty($_GET['busqueda'])) 
 {
     $busqueda = $conn->real_escape_string($_GET['busqueda']);
     $sql = "SELECT * FROM contactos_emergencia 
-            WHERE id_usuario = $id_usuario 
+            WHERE id_usuario = '$id_usuario' 
             AND nombre_completo LIKE '%$busqueda%' 
             ORDER BY nombre_completo";
 } 
 else 
 {
     $sql = "SELECT * FROM contactos_emergencia 
-            WHERE id_usuario = $id_usuario 
+            WHERE id_usuario = '$id_usuario' 
             ORDER BY nombre_completo";
 }
 
 $result = $conn->query($sql);
-if ($result && $result->num_rows > 0) 
-{
-    while ($row = $result->fetch_assoc()) 
-    {
-        $contactos[] = $row;
+
+// Evitamos error fatal si la consulta falla
+if ($result) {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $contactos[] = $row;
+        }
     }
 }
 
-//Guardar y actualizar
+// Guardar y actualizar
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
     $nombre = trim($_POST['nombre']);
@@ -59,30 +84,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     
     $error = '';
     
-    // Err1: Nombre vacío
-    if (empty($nombre)) 
-    {
+    if (empty($nombre)) {
         $error = $MSG3;
-    }
-    // Err2: Teléfono vacío o inválido
-    elseif (empty($telefono) || strlen(preg_replace('/\D/', '', $telefono)) < 10) 
-    {
+    } elseif (empty($telefono) || strlen(preg_replace('/\D/', '', $telefono)) < 10) {
         $error = $MSG4;
-    }
-    // Err3: Parentesco no seleccionado
-    elseif (empty($parentesco)) 
-    {
+    } elseif (empty($parentesco)) {
         $error = 'Debe seleccionar un parentesco';
-    }
-    // Err4: Límite de contactos 
-    elseif ($id_contacto == 0) 
-    {
-        $count_sql = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = $id_usuario";
+    } elseif ($id_contacto == 0) {
+        // Verificar límite
+        $count_sql = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = '$id_usuario'";
         $count_result = $conn->query($count_sql);
-        $count_row = $count_result->fetch_assoc();
-        if ($count_row['total'] >= $limite_contactos) 
-        {
-            $error = $MSG5;
+        if ($count_result) {
+            $count_row = $count_result->fetch_assoc();
+            if ($count_row['total'] >= $limite_contactos) {
+                $error = $MSG5;
+            }
         }
     }
     
@@ -94,71 +110,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         
         if ($id_contacto == 0) 
         {
-
-            $sql = "INSERT INTO contactos_emergencia (id_usuario, nombre_completo, telefono, parentesco) 
-                    VALUES ($id_usuario, '$nombre_esc', '$telefono_esc', '$parentesco_esc')";
+            $sql = "INSERT INTO contactos_emergencia (id_usuario, nombre_completo, telefono, parentesco, fecha_registro) 
+                    VALUES ('$id_usuario', '$nombre_esc', '$telefono_esc', '$parentesco_esc', NOW())";
         } 
         else 
         {
-            // Actualizar
             $sql = "UPDATE contactos_emergencia 
                     SET nombre_completo = '$nombre_esc', 
                         telefono = '$telefono_esc', 
                         parentesco = '$parentesco_esc' 
-                    WHERE id = $id_contacto AND id_usuario = $id_usuario";
+                    WHERE id = $id_contacto AND id_usuario = '$id_usuario'";
         }
         
-        if ($conn->query($sql) === TRUE) 
-        {
-            $mensaje = $MSG1;
-            $tipo_mensaje = 'success';
-            
-            // Limpiar formulario
-            $nombre = '';
-            $telefono = '';
-            $parentesco = '';
-            $id_contacto = 0;
-            
-            // Recargar contactos
-            header("Location: contacto.php?msg=guardado");
+        if ($conn->query($sql) === TRUE) {
+            // Recargar para limpiar POST
+            echo "<meta http-equiv='refresh' content='0;url=contacto.php?msg=guardado'>";
             exit();
-        } 
-        else 
-        {
+        } else {
             $error = "Error en la base de datos: " . $conn->error;
         }
     }
     
-    // Si hay error, mostrar mensaje
-    if (!empty($error)) 
-    {
+    if (!empty($error)) {
         $mensaje = $error;
         $tipo_mensaje = 'error';
     }
 }
 
-//Eliminar
+// Eliminar
 if (isset($_GET['eliminar'])) 
 {
     $id_eliminar = intval($_GET['eliminar']);
-    
-    $sql = "DELETE FROM contactos_emergencia WHERE id = $id_eliminar AND id_usuario = $id_usuario";
-    if ($conn->query($sql) === TRUE) 
-    {
-        header("Location: contacto.php?msg=eliminado");
+    $sql = "DELETE FROM contactos_emergencia WHERE id = $id_eliminar AND id_usuario = '$id_usuario'";
+    if ($conn->query($sql) === TRUE) {
+        echo "<meta http-equiv='refresh' content='0;url=contacto.php?msg=eliminado'>";
         exit();
     }
 }
 
-//Editar
+// Editar
 if (isset($_GET['editar'])) 
 {
     $id_editar = intval($_GET['editar']);
-    
-    $sql = "SELECT * FROM contactos_emergencia WHERE id = $id_editar AND id_usuario = $id_usuario";
+    $sql = "SELECT * FROM contactos_emergencia WHERE id = $id_editar AND id_usuario = '$id_usuario'";
     $result = $conn->query($sql);
-    if ($result && $result->num_rows == 1) 
-    {
+    if ($result && $result->num_rows == 1) {
         $contacto = $result->fetch_assoc();
         $nombre = $contacto['nombre_completo'];
         $telefono = $contacto['telefono'];
@@ -167,15 +163,13 @@ if (isset($_GET['editar']))
     }
 }
 
-//Copiar
+// Copiar
 if (isset($_GET['copiar'])) 
 {
     $id_copiar = intval($_GET['copiar']);
-    
-    $sql = "SELECT * FROM contactos_emergencia WHERE id = $id_copiar AND id_usuario = $id_usuario";
+    $sql = "SELECT * FROM contactos_emergencia WHERE id = $id_copiar AND id_usuario = '$id_usuario'";
     $result = $conn->query($sql);
-    if ($result && $result->num_rows == 1) 
-    {
+    if ($result && $result->num_rows == 1) {
         $contacto = $result->fetch_assoc();
         $nombre = $contacto['nombre_completo'] . ' (copia)';
         $telefono = $contacto['telefono'];
@@ -184,22 +178,21 @@ if (isset($_GET['copiar']))
     }
 }
 
-//verifica el limite de contacto
-$sql_count = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = $id_usuario";
+// Contar total
+$total_contactos = 0;
+$sql_count = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = '$id_usuario'";
 $result_count = $conn->query($sql_count);
-$row_count = $result_count->fetch_assoc();
-$total_contactos = $row_count['total'];
+if ($result_count) {
+    $row_count = $result_count->fetch_assoc();
+    $total_contactos = $row_count['total'];
+}
 
-//muestra mensaje 
-if (isset($_GET['msg'])) 
-{
-    if ($_GET['msg'] == 'guardado') 
-    {
+// Mensajes GET
+if (isset($_GET['msg'])) {
+    if ($_GET['msg'] == 'guardado') {
         $mensaje = $MSG1;
         $tipo_mensaje = 'success';
-    } 
-    elseif ($_GET['msg'] == 'eliminado') 
-    {
+    } elseif ($_GET['msg'] == 'eliminado') {
         $mensaje = $MSG8;
         $tipo_mensaje = 'success';
     }

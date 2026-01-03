@@ -1,8 +1,15 @@
 <?php
-session_start();
+// Incluimos la conexión creada por el instalador
+require 'conexion.php';
 
-if (isset($_SESSION['usuario_id'])) 
-{
+// Iniciamos sesión para verificar si ya ingresó
+// Usamos session_status para evitar errores si conexion.php ya intentó algo
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si ya está autenticado, mandar al index
+if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
     header('Location: index.php');
     exit();
 }
@@ -12,7 +19,6 @@ if (isset($_SESSION['usuario_id']))
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/log.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <style>
@@ -91,26 +97,24 @@ if (isset($_SESSION['usuario_id']))
             transform: translateY(-2px);
         }
         
-        button:active {
-            transform: translateY(0);
-        }
-        
         .error { 
-            color: red; 
-            background: #ffe6e6; 
+            color: #721c24; 
+            background: #f8d7da; 
             padding: 12px;
             border-radius: 8px;
-            border-left: 4px solid red;
+            border-left: 4px solid #721c24;
             margin: 15px 0;
+            text-align: center;
         }
         
         .success { 
-            color: green; 
-            background: #e6ffe6; 
+            color: #155724; 
+            background: #d4edda; 
             padding: 12px;
             border-radius: 8px;
-            border-left: 4px solid green;
+            border-left: 4px solid #155724;
             margin: 15px 0;
+            text-align: center;
         }
         
         .form-container {
@@ -132,40 +136,63 @@ if (isset($_SESSION['usuario_id']))
             <input type="password" id="contraseña" name="contraseña" required placeholder="Ingresa tu contraseña">
             
             <button type="submit" name="login">🔐 Iniciar Sesión</button>
+            
+            <?php
+            if (isset($_POST['login'])) 
+            {
+                // Obtenemos los datos del formulario
+                $boleta = $_POST['boleta'];
+                $password_input = $_POST['contraseña'];
+
+                // Intentamos usar la función que creó el instalador en conexion.php
+                // Esta función verifica boleta, password y crea las sesiones
+                if (function_exists('verificarUsuario')) {
+                    $loginExitoso = verificarUsuario($boleta, $password_input);
+                    
+                    if ($loginExitoso) {
+                        echo "<div class='success'>✅ Bienvenido, redirigiendo...</div>";
+                        echo "<meta http-equiv='refresh' content='1;url=index.php'>";
+                        exit();
+                    } else {
+                        echo "<div class='error'>❌ Boleta o contraseña incorrecta.</div>";
+                    }
+                } 
+                // RESPALDO MANUAL: Si por alguna razón la función no existe, hacemos la consulta manual
+                // respetando la estructura de tablas de tu instalador
+                else {
+                    // Consulta uniendo usuarios y alumnos para obtener el nombre
+                    $sql = "SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel 
+                            FROM usuarios u 
+                            LEFT JOIN alumnos a ON u.boleta = a.boleta 
+                            WHERE u.boleta = '$boleta'";
+                    
+                    $resultado = $conn->query($sql);
+
+                    if ($resultado && $resultado->num_rows > 0) {
+                        $usuario = $resultado->fetch_assoc();
+                        
+                        // Verificamos contraseña (texto plano según tu instalador)
+                        if ($usuario['password'] === $password_input) {
+                            $_SESSION['boleta'] = $usuario['boleta'];
+                            $_SESSION['nombre'] = $usuario['nombre'] . " " . $usuario['apellidos'];
+                            $_SESSION['nivel'] = $usuario['nivel'];
+                            $_SESSION['autenticado'] = true;
+                            
+                            echo "<div class='success'>✅ Bienvenido " . $usuario['nombre'] . "</div>";
+                            echo "<meta http-equiv='refresh' content='1;url=index.php'>";
+                            exit();
+                        } else {
+                            echo "<div class='error'>❌ Contraseña incorrecta.</div>";
+                        }
+                    } else {
+                        echo "<div class='error'>❌ La boleta no existe.</div>";
+                    }
+                }
+                
+                $conn->close();
+            }
+            ?>
         </form>
     </div>
-
-    <?php
-    if (isset($_POST['login'])) 
-    {
-        require 'conexion.php';
-
-        $correo = $_POST['boleta'];
-        $contraseña = $_POST['contraseña'];
-
-        $sql = "SELECT * FROM usuarios WHERE boleta = '$correo' and contraseña = '$contraseña'";
-        $resultado = $conn->query($sql);
-
-        if($resultado->num_rows == 0)
-        {
-            echo "<div class='error'>❌ Algo salió mal, verifique la boleta o la contraseña.</div>";
-        }
-        else
-        {
-             $usuario = $resultado->fetch_assoc();
-            
-            // Guardar datos en sesión
-            $_SESSION['usuario_id'] = $usuario['id'];
-            $_SESSION['boleta'] = $usuario['boleta'];
-            $_SESSION['nombre'] = $usuario['nombre']; 
-            $_SESSION['tipo'] = $usuario['tipo'];
-
-            echo "<div class='success'>✅ Sesión iniciada. Redirigiendo...</div>";
-            header('Refresh: 1; URL=index.php'); 
-            exit();
-        }
-        $conn->close();
-    }
-    ?>
 </body>
 </html>
