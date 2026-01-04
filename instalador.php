@@ -46,6 +46,7 @@ $sql_queries = [
     "DROP TABLE IF EXISTS usuarios",
     "DROP TABLE IF EXISTS horarios",
     "DROP TABLE IF EXISTS calendario_eventos",
+    "DROP TABLE IF EXISTS mensajes",
     
     // Crear tabla usuarios
     "CREATE TABLE usuarios (
@@ -99,6 +100,15 @@ $sql_queries = [
         fecha DATE NOT NULL,
         evento VARCHAR(150) NOT NULL,
         tipo ENUM('Examen','Suspensión','Evento','Entrega') NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE mensajes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        remitente_nombre VARCHAR(100) NOT NULL,
+        destinatario_tipo VARCHAR(50) NOT NULL,
+        asunto VARCHAR(100) NOT NULL,
+        mensaje TEXT NOT NULL,
+        fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
     // Insertar materias

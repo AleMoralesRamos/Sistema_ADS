@@ -198,10 +198,7 @@ $res_cal = $conn->query($cons_cal);
         </div>
 
     </div>
-    
-    <div style="text-align: center; margin: 20px;">
-        <a href="index.php" style="color: #4CAF50; text-decoration: none; font-weight: bold;">⬅ Volver al Inicio</a>
-    </div>
+    <a href="index.php" style="color: #2196F3; text-decoration: none;">⬅ Volver al Inicio</a>
 
 </body>
 </html>
