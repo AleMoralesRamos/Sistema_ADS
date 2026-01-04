@@ -40,7 +40,7 @@ if ($conn->query("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 
 }
 
 $sql_queries = [
-    "DROP TABLE IF EXISTS contactos_emergencia", 
+    "DROP TABLE IF EXISTS contactos_emergencia",
     "DROP TABLE IF EXISTS mensajes",
     "DROP TABLE IF EXISTS comunicacion",
     "DROP TABLE IF EXISTS calendario_eventos",
@@ -56,7 +56,7 @@ $sql_queries = [
         password VARCHAR(255) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
-    //Crear tabla ALUMNOS
+    // 4. Crear tabla ALUMNOS
     "CREATE TABLE alumnos (
         boleta BIGINT(20) NOT NULL PRIMARY KEY,
         nombre VARCHAR(100) NOT NULL,
@@ -65,7 +65,7 @@ $sql_queries = [
         FOREIGN KEY (boleta) REFERENCES usuarios(boleta) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
-    //Crear tabla MATERIAS
+    // 5. Crear tabla MATERIAS
     "CREATE TABLE materias (
         clave VARCHAR(10) NOT NULL PRIMARY KEY,
         nivel ENUM('Kinder','Primaria','Secundaria') NOT NULL,
@@ -73,7 +73,7 @@ $sql_queries = [
         materia VARCHAR(120) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
-    //Crear tabla KARDEX
+    // 6. Crear tabla KARDEX
     "CREATE TABLE kardex (
         boleta BIGINT(20) NOT NULL,
         clave VARCHAR(10) NOT NULL,
@@ -86,7 +86,7 @@ $sql_queries = [
         FOREIGN KEY (clave) REFERENCES materias(clave) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    //Crear tabla HORARIOS
+    // 7. Crear tabla HORARIOS
     "CREATE TABLE horarios (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nivel ENUM('Kinder','Primaria','Secundaria') NOT NULL,
@@ -97,7 +97,7 @@ $sql_queries = [
         profesor VARCHAR(100) DEFAULT 'Por asignar'
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    //Crear tabla CALENDARIO
+    // 8. Crear tabla CALENDARIO
     "CREATE TABLE calendario_eventos (
         id INT AUTO_INCREMENT PRIMARY KEY,
         fecha DATE NOT NULL,
@@ -105,7 +105,7 @@ $sql_queries = [
         tipo ENUM('Examen','Suspensión','Evento','Entrega') NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    //Crear tabla COMUNICACION
+    // 9. Crear tabla COMUNICACION
     "CREATE TABLE comunicacion (
         id INT AUTO_INCREMENT PRIMARY KEY,
         remitente_nombre VARCHAR(100) NOT NULL,
@@ -115,7 +115,7 @@ $sql_queries = [
         fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    //Crear tabla MENSAJES
+    // 10. Crear tabla MENSAJES
     "CREATE TABLE mensajes (
         id INT AUTO_INCREMENT PRIMARY KEY,
         emisor_boleta BIGINT(20) NOT NULL,
@@ -127,7 +127,7 @@ $sql_queries = [
         FOREIGN KEY (receptor_boleta) REFERENCES usuarios(boleta) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    // Crear tabla CONTACTOS DE EMERGENCIA
+    // 11. Crear tabla CONTACTOS DE EMERGENCIA
     "CREATE TABLE contactos_emergencia (
         id INT(11) NOT NULL AUTO_INCREMENT,
         id_usuario BIGINT(20) NOT NULL,
@@ -138,6 +138,8 @@ $sql_queries = [
         PRIMARY KEY (id),
         FOREIGN KEY (id_usuario) REFERENCES usuarios(boleta) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+    
+    // --- INSERCIONES DE DATOS ---
 
     // Insertar materias
     "INSERT INTO materias (clave, nivel, semestre, materia) VALUES
@@ -158,7 +160,7 @@ $sql_queries = [
     ('S204', 'Secundaria', 2, 'Tecnología'),
     ('S205', 'Secundaria', 3, 'Formación Cívica')",
     
-    // Insertar usuarios 
+    // Insertar usuarios
     "INSERT INTO usuarios (boleta, password) VALUES
     (2023630289, 'pepito1'),
     (2023630290, 'pepito2'),
@@ -200,19 +202,18 @@ $sql_queries = [
     (2023630290, 'P104', 7, '24/1', 'ORD', 'Aprobada'),
     (2023630290, 'S201', 6, '24/1', 'ORD', 'Aprobada')",
 
-    // Insertar Horarios
+    // Insertar Horarios (CORREGIDOS PARA COINCIDIR CON MATERIAS)
     "INSERT INTO horarios (nivel, dia, hora_inicio, hora_fin, materia, profesor) VALUES
     ('Kinder', 'Lunes', '08:00', '09:00', 'Desarrollo Motriz', 'Prof. Ana'),
-    ('Kinder', 'Lunes', '09:00', '10:00', 'Cantos y Juegos', 'Prof. Luis'),
+    ('Kinder', 'Lunes', '09:00', '10:00', 'Lenguaje Inicial', 'Prof. Luis'),     
     ('Kinder', 'Martes', '08:00', '10:00', 'Expresión Artística', 'Prof. Sol'),
     ('Primaria', 'Lunes', '07:00', '08:30', 'Matemáticas I', 'Prof. Jirafales'),
-    ('Primaria', 'Lunes', '08:30', '10:00', 'Español', 'Prof. Ximena'),
+    ('Primaria', 'Lunes', '08:30', '10:00', 'Español I', 'Prof. Ximena'),         
     ('Primaria', 'Miércoles', '10:30', '12:00', 'Historia', 'Prof. Tenoch'),
     ('Secundaria', 'Lunes', '07:00', '09:00', 'Física', 'Dr. Emmett Brown'),
     ('Secundaria', 'Martes', '07:00', '09:00', 'Química', 'Walter White'),
-    ('Secundaria', 'Viernes', '11:00', '13:00', 'Educación Física', 'Prof. Rambo')",
+    ('Secundaria', 'Viernes', '11:00', '13:00', 'Tecnología', 'Prof. Rambo')",
 
-    // Insertar Eventos
     "INSERT INTO calendario_eventos (fecha, evento, tipo) VALUES
     (CURDATE() + INTERVAL 2 DAY, 'Entrega de Boletas', 'Evento'),
     (CURDATE() + INTERVAL 5 DAY, 'Suspensión de labores', 'Suspensión'),
