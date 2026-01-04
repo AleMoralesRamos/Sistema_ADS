@@ -44,6 +44,8 @@ $sql_queries = [
     "DROP TABLE IF EXISTS alumnos",
     "DROP TABLE IF EXISTS materias",
     "DROP TABLE IF EXISTS usuarios",
+    "DROP TABLE IF EXISTS horarios",
+    "DROP TABLE IF EXISTS calendario_eventos",
     
     // Crear tabla usuarios
     "CREATE TABLE usuarios (
@@ -79,6 +81,24 @@ $sql_queries = [
         PRIMARY KEY (boleta, clave),
         FOREIGN KEY (boleta) REFERENCES alumnos(boleta),
         FOREIGN KEY (clave) REFERENCES materias(clave)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE horarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nivel ENUM('Kinder','Primaria','Secundaria') NOT NULL,
+        dia ENUM('Lunes','Martes','Miércoles','Jueves','Viernes') NOT NULL,
+        hora_inicio TIME NOT NULL,
+        hora_fin TIME NOT NULL,
+        materia VARCHAR(100) NOT NULL,
+        profesor VARCHAR(100) DEFAULT 'Por asignar'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    // 3. Crear tabla CALENDARIO
+    "CREATE TABLE calendario_eventos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        fecha DATE NOT NULL,
+        evento VARCHAR(150) NOT NULL,
+        tipo ENUM('Examen','Suspensión','Evento','Entrega') NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
     // Insertar materias
@@ -138,7 +158,25 @@ $sql_queries = [
     (2023630290, 'K003', 9, '24/1', 'ORD', 'Aprobada'),
     (2023630290, 'P103', 8, '24/1', 'ORD', 'Aprobada'),
     (2023630290, 'P104', 7, '24/1', 'ORD', 'Aprobada'),
-    (2023630290, 'S201', 6, '24/1', 'ORD', 'Aprobada')"
+    (2023630290, 'S201', 6, '24/1', 'ORD', 'Aprobada')",
+
+    "INSERT INTO horarios (nivel, dia, hora_inicio, hora_fin, materia, profesor) VALUES
+    ('Kinder', 'Lunes', '08:00', '09:00', 'Desarrollo Motriz', 'Prof. Ana'),
+    ('Kinder', 'Lunes', '09:00', '10:00', 'Cantos y Juegos', 'Prof. Luis'),
+    ('Kinder', 'Martes', '08:00', '10:00', 'Expresión Artística', 'Prof. Sol'),
+    ('Primaria', 'Lunes', '07:00', '08:30', 'Matemáticas I', 'Prof. Jirafales'),
+    ('Primaria', 'Lunes', '08:30', '10:00', 'Español', 'Prof. Ximena'),
+    ('Primaria', 'Miércoles', '10:30', '12:00', 'Historia', 'Prof. Tenoch'),
+    ('Secundaria', 'Lunes', '07:00', '09:00', 'Física', 'Dr. Emmett Brown'),
+    ('Secundaria', 'Martes', '07:00', '09:00', 'Química', 'Walter White'),
+    ('Secundaria', 'Viernes', '11:00', '13:00', 'Educación Física', 'Prof. Rambo')",
+
+    // 5. Insertar EVENTOS DEL CALENDARIO
+    "INSERT INTO calendario_eventos (fecha, evento, tipo) VALUES
+    (CURDATE() + INTERVAL 2 DAY, 'Entrega de Boletas', 'Evento'),
+    (CURDATE() + INTERVAL 5 DAY, 'Suspensión de labores', 'Suspensión'),
+    (CURDATE() + INTERVAL 10 DAY, 'Examen Parcial Matemáticas', 'Examen'),
+    (CURDATE() + INTERVAL 20 DAY, 'Festival de la Primavera', 'Evento')"
 ];
 
 // Ejecutar consultas una por una
