@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $asunto = $conn->real_escape_string($asunto);
         $mensaje = $conn->real_escape_string($mensaje);
 
-        $sql = "INSERT INTO mensajes (remitente_nombre, destinatario_tipo, asunto, mensaje) 
+        $sql = "INSERT INTO comunicacion (remitente_nombre, destinatario_tipo, asunto, mensaje) 
                 VALUES ('$nombre', '$destinatario', '$asunto', '$mensaje')";
         
         if ($conn->query($sql) === TRUE) 

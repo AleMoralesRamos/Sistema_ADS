@@ -4,6 +4,8 @@ $user = 'root';
 $pass = '';
 $dbname = 'sistema_escolar';  
 
+mysqli_report(MYSQLI_REPORT_OFF);
+
 echo "<!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +15,8 @@ echo "<!DOCTYPE html>
         .container { max-width: 800px; margin: 0 auto; }
         .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         h1 { color: #1a2980; }
-        .success { background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin: 10px 0; }
-        .error { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid #f5c6cb; }
         .btn { display: inline-block; padding: 10px 20px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; margin: 10px 5px; }
     </style>
 </head>
@@ -23,7 +25,6 @@ echo "<!DOCTYPE html>
         <div class='card'>
             <h1>Instalador Simple del Sistema Escolar</h1>";
 
-// Conectar a MySQL
 $conn = new mysqli($host, $user, $pass);
 if ($conn->connect_error) {
     die("<div class='error'>❌ Error de conexión: " . $conn->connect_error . "</div>");
@@ -31,39 +32,40 @@ if ($conn->connect_error) {
 
 echo "<div class='success'>✅ Conectado a MySQL</div>";
 
-// Crear base de datos
 if ($conn->query("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci")) {
-    echo "<div class='success'>✅ Base de datos '$dbname' creada</div>";
+    echo "<div class='success'>✅ Base de datos '$dbname' seleccionada</div>";
     $conn->select_db($dbname);
 } else {
-    die("<div class='error'>❌ Error creando base de datos</div>");
+    die("<div class='error'>❌ Error creando base de datos: " . $conn->error . "</div>");
 }
 
 $sql_queries = [
+    "DROP TABLE IF EXISTS contactos_emergencia", 
+    "DROP TABLE IF EXISTS mensajes",
+    "DROP TABLE IF EXISTS comunicacion",
+    "DROP TABLE IF EXISTS calendario_eventos",
+    "DROP TABLE IF EXISTS horarios",
     "DROP TABLE IF EXISTS kardex",
-    "DROP TABLE IF EXISTS alumnos",
+    "DROP TABLE IF EXISTS alumnos", 
     "DROP TABLE IF EXISTS materias",
     "DROP TABLE IF EXISTS usuarios",
-    "DROP TABLE IF EXISTS horarios",
-    "DROP TABLE IF EXISTS calendario_eventos",
-    "DROP TABLE IF EXISTS mensajes",
     
-    // Crear tabla usuarios
+    // 3. Crear tabla USUARIOS
     "CREATE TABLE usuarios (
         boleta BIGINT(20) NOT NULL PRIMARY KEY,
         password VARCHAR(255) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
-    // Crear tabla alumnos
+    //Crear tabla ALUMNOS
     "CREATE TABLE alumnos (
         boleta BIGINT(20) NOT NULL PRIMARY KEY,
         nombre VARCHAR(100) NOT NULL,
         apellidos VARCHAR(120) NOT NULL,
-        nivel ENUM('Kinder','Primaria','Secundaria') DEFAULT NULL,
-        FOREIGN KEY (boleta) REFERENCES usuarios(boleta)
+        nivel ENUM('Kinder','Primaria','Secundaria','Administrativo') DEFAULT NULL,
+        FOREIGN KEY (boleta) REFERENCES usuarios(boleta) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
-    // Crear tabla materias
+    //Crear tabla MATERIAS
     "CREATE TABLE materias (
         clave VARCHAR(10) NOT NULL PRIMARY KEY,
         nivel ENUM('Kinder','Primaria','Secundaria') NOT NULL,
@@ -71,7 +73,7 @@ $sql_queries = [
         materia VARCHAR(120) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
-    // Crear tabla kardex
+    //Crear tabla KARDEX
     "CREATE TABLE kardex (
         boleta BIGINT(20) NOT NULL,
         clave VARCHAR(10) NOT NULL,
@@ -80,10 +82,11 @@ $sql_queries = [
         forma_evaluacion ENUM('ORD','REC','EXT') DEFAULT NULL,
         estado ENUM('Aprobada','Reprobada','Sin cursar') DEFAULT 'Sin cursar',
         PRIMARY KEY (boleta, clave),
-        FOREIGN KEY (boleta) REFERENCES alumnos(boleta),
-        FOREIGN KEY (clave) REFERENCES materias(clave)
+        FOREIGN KEY (boleta) REFERENCES alumnos(boleta) ON DELETE CASCADE,
+        FOREIGN KEY (clave) REFERENCES materias(clave) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
+    //Crear tabla HORARIOS
     "CREATE TABLE horarios (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nivel ENUM('Kinder','Primaria','Secundaria') NOT NULL,
@@ -94,7 +97,7 @@ $sql_queries = [
         profesor VARCHAR(100) DEFAULT 'Por asignar'
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    // 3. Crear tabla CALENDARIO
+    //Crear tabla CALENDARIO
     "CREATE TABLE calendario_eventos (
         id INT AUTO_INCREMENT PRIMARY KEY,
         fecha DATE NOT NULL,
@@ -102,7 +105,8 @@ $sql_queries = [
         tipo ENUM('Examen','Suspensión','Evento','Entrega') NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
-    "CREATE TABLE mensajes (
+    //Crear tabla COMUNICACION
+    "CREATE TABLE comunicacion (
         id INT AUTO_INCREMENT PRIMARY KEY,
         remitente_nombre VARCHAR(100) NOT NULL,
         destinatario_tipo VARCHAR(50) NOT NULL,
@@ -110,7 +114,31 @@ $sql_queries = [
         mensaje TEXT NOT NULL,
         fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
-    
+
+    //Crear tabla MENSAJES
+    "CREATE TABLE mensajes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        emisor_boleta BIGINT(20) NOT NULL,
+        receptor_boleta BIGINT(20) NOT NULL,
+        asunto VARCHAR(150) NOT NULL,
+        contenido TEXT NOT NULL,
+        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (emisor_boleta) REFERENCES usuarios(boleta) ON DELETE CASCADE,
+        FOREIGN KEY (receptor_boleta) REFERENCES usuarios(boleta) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    // Crear tabla CONTACTOS DE EMERGENCIA
+    "CREATE TABLE contactos_emergencia (
+        id INT(11) NOT NULL AUTO_INCREMENT,
+        id_usuario BIGINT(20) NOT NULL,
+        nombre_completo VARCHAR(100) NOT NULL,
+        telefono VARCHAR(20) NOT NULL,
+        parentesco VARCHAR(50) NOT NULL,
+        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(boleta) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
     // Insertar materias
     "INSERT INTO materias (clave, nivel, semestre, materia) VALUES
     ('K001', 'Kinder', 1, 'Desarrollo Motriz'),
@@ -141,7 +169,8 @@ $sql_queries = [
     (2023630295, 'pepito7'),
     (2023630296, 'pepito8'),
     (2023630297, 'pepito9'),
-    (2023630298, 'pepito10')",
+    (2023630298, 'pepito10'),
+    (9999999999, 'admin123')",
     
     // Insertar alumnos
     "INSERT INTO alumnos (boleta, nombre, apellidos, nivel) VALUES
@@ -154,7 +183,8 @@ $sql_queries = [
     (2023630295, 'Jorge', 'González', 'Kinder'),
     (2023630296, 'Sofía', 'Sánchez', 'Primaria'),
     (2023630297, 'Miguel', 'Ramírez', 'Secundaria'),
-    (2023630298, 'Isabel', 'Torres', 'Kinder')",
+    (2023630298, 'Isabel', 'Torres', 'Kinder'),
+    (9999999999, 'DIRECCIÓN', 'ESCOLAR', 'Administrativo')",
     
     // Insertar kardex
     "INSERT INTO kardex (boleta, clave, calificacion, periodo, forma_evaluacion, estado) VALUES
@@ -170,6 +200,7 @@ $sql_queries = [
     (2023630290, 'P104', 7, '24/1', 'ORD', 'Aprobada'),
     (2023630290, 'S201', 6, '24/1', 'ORD', 'Aprobada')",
 
+    // Insertar Horarios
     "INSERT INTO horarios (nivel, dia, hora_inicio, hora_fin, materia, profesor) VALUES
     ('Kinder', 'Lunes', '08:00', '09:00', 'Desarrollo Motriz', 'Prof. Ana'),
     ('Kinder', 'Lunes', '09:00', '10:00', 'Cantos y Juegos', 'Prof. Luis'),
@@ -181,15 +212,18 @@ $sql_queries = [
     ('Secundaria', 'Martes', '07:00', '09:00', 'Química', 'Walter White'),
     ('Secundaria', 'Viernes', '11:00', '13:00', 'Educación Física', 'Prof. Rambo')",
 
-    // 5. Insertar EVENTOS DEL CALENDARIO
+    // Insertar Eventos
     "INSERT INTO calendario_eventos (fecha, evento, tipo) VALUES
     (CURDATE() + INTERVAL 2 DAY, 'Entrega de Boletas', 'Evento'),
     (CURDATE() + INTERVAL 5 DAY, 'Suspensión de labores', 'Suspensión'),
     (CURDATE() + INTERVAL 10 DAY, 'Examen Parcial Matemáticas', 'Examen'),
-    (CURDATE() + INTERVAL 20 DAY, 'Festival de la Primavera', 'Evento')"
+    (CURDATE() + INTERVAL 20 DAY, 'Festival de la Primavera', 'Evento')",
+
+    "INSERT INTO mensajes (emisor_boleta, receptor_boleta, asunto, contenido) VALUES 
+    (9999999999, 2023630289, 'Aviso Importante', 'Mañana no hay clases.'),
+    (9999999999, 2023630289, 'Aviso Importante', 'El dia Viernes junta con padres.')"
 ];
 
-// Ejecutar consultas una por una
 $errors = [];
 $success_count = 0;
 
@@ -201,7 +235,6 @@ foreach ($sql_queries as $index => $sql) {
     }
 }
 
-// Mostrar 
 echo "<div class='success'>✅ Ejecutadas $success_count consultas de " . count($sql_queries) . "</div>";
 
 if (!empty($errors)) {
@@ -212,7 +245,7 @@ if (!empty($errors)) {
 }
 
 $conexion_content = '<?php
-// Conexión a proyectoe2 - CONTRASEÑAS NORMALES
+// Conexión a sistema_escolar
 $host = "localhost";
 $username = "root";
 $password = "";
@@ -238,7 +271,9 @@ function verificarUsuario($boleta, $password_input) {
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
         if ($usuario["password"] === $password_input) {
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
             $_SESSION["boleta"] = $usuario["boleta"];
             $_SESSION["nombre"] = $usuario["nombre"] . " " . $usuario["apellidos"];
             $_SESSION["nivel"] = $usuario["nivel"];
@@ -256,66 +291,15 @@ if (file_put_contents('conexion.php', $conexion_content)) {
     echo "<div class='error'>❌ Error creando conexion.php</div>";
 }
 
-// Verificar tablas creadas
-echo "<h3>📊 Tablas creadas:</h3>";
-$tables = ['usuarios', 'alumnos', 'materias', 'kardex'];
-foreach ($tables as $table) {
-    $result = $conn->query("SELECT COUNT(*) as count FROM $table");
-    if ($result) {
-        $count = $result->fetch_assoc()['count'];
-        echo "<div>• Tabla <strong>$table</strong>: $count registros</div>";
-    } else {
-        echo "<div class='error'>❌ Error accediendo a tabla $table</div>";
-    }
-}
-//Usuarios creados
-echo "<h3>👥 Usuarios creados:</h3>";
-$result = $conn->query("SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel 
-                       FROM usuarios u 
-                       LEFT JOIN alumnos a ON u.boleta = a.boleta 
-                       ORDER BY u.boleta LIMIT 5");
-
-echo "<table border='1' cellpadding='5' style='margin: 10px 0;'>
-        <tr>
-            <th>Boleta</th>
-            <th>Contraseña</th>
-            <th>Nombre</th>
-            <th>Nivel</th>
-        </tr>";
-
-while ($row = $result->fetch_assoc()) {
-    echo "<tr>
-            <td>" . $row['boleta'] . "</td>
-            <td><strong>" . $row['password'] . "</strong></td>
-            <td>" . $row['nombre'] . " " . $row['apellidos'] . "</td>
-            <td>" . $row['nivel'] . "</td>
-          </tr>";
-}
-echo "</table>";
-
 $conn->close();
 
 echo "<h2>🎉 ¡Instalación completada!</h2>";
-echo "<div style='padding: 20px; background: #e8f4fd; border-radius: 10px; margin: 20px 0;'>";
-echo "<h3>🔑 Credenciales de prueba:</h3>";
-echo "<p><strong>Usuario 1:</strong> Boleta: <strong>2023630289</strong> | Contraseña: <strong>pepito1</strong></p>";
-echo "<p><strong>Usuario 2:</strong> Boleta: <strong>2023630290</strong> | Contraseña: <strong>pepito2</strong></p>";
-echo "<p><em>Todas las contraseñas son texto plano: pepito1, pepito2, pepito3, etc.</em></p>";
-echo "</div>";
-
 echo "<div style='text-align: center; margin: 30px 0;'>";
 echo "<a href='inicias.php' class='btn'>Iniciar Sesión</a>";
-echo "<a href='index.php' class='btn' style='background: #2196F3;'>Página Principal</a>";
-echo "</div>";
-
-echo "<div class='error'>";
-echo "<h3>⚠️ IMPORTANTE:</h3>";
-echo "<p>1. <strong>Elimina este instalador</strong> después de usarlo (renómbralo a .bak)</p>";
-echo "<p>2. <strong>Cambia las contraseñas</strong> en producción por seguridad</p>";
-echo "<p>3. <strong>Base de datos:</strong> proyectoe2</p>";
 echo "</div>";
 
 echo "        </div>
     </div>
 </body>
 </html>";
+?>

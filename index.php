@@ -52,6 +52,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
             <a href="calif.php">📊 Calificaciones</a>
             <a href="informacion.php">✉️ Contactar Escuela</a>
             <a href="contacto.php">🚨 Contactos Emergencia</a>
+            <a href="mensaje_situaciones.php">📩 Incidencias</a>
             <a href="logout.php" style="background-color: #dc3545;">🚪 Cerrar Sesión</a>
         </div>
         

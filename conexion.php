@@ -1,5 +1,5 @@
 <?php
-// Conexión a proyectoe2 - CONTRASEÑAS NORMALES
+// Conexión a sistema_escolar
 $host = "localhost";
 $username = "root";
 $password = "";
@@ -25,7 +25,9 @@ function verificarUsuario($boleta, $password_input) {
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
         if ($usuario["password"] === $password_input) {
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
             $_SESSION["boleta"] = $usuario["boleta"];
             $_SESSION["nombre"] = $usuario["nombre"] . " " . $usuario["apellidos"];
             $_SESSION["nivel"] = $usuario["nivel"];
