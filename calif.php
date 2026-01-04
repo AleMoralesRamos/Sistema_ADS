@@ -1,14 +1,18 @@
 <?php
 session_start();
 
+// 1. Verificar seguridad
 if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
     header('Location: inicias.php');
     exit();
 }
 
-require('conexion.php'); 
-?>
+// 2. Definir variables de sesión para usarlas en los otros archivos
+$boleta = $_SESSION['boleta'];
+$nombre = $_SESSION['nombre'];
+$nivel_alumno = $_SESSION['nivel'];
 
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,110 +21,50 @@ require('conexion.php');
     <title>Calificaciones</title>
     <link rel="stylesheet" href="./css/estilo3.css">
     <style>
-        /* Estilos para integrar con tu sistema */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; }
+        .system-header { background: linear-gradient(135deg, #1a2980, #26d0ce); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .system-menu { background: white; padding: 15px 30px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .system-menu a { background-color: #2196F3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-right: 10px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        .system-header {
-            background: linear-gradient(135deg, #1a2980, #26d0ce);
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .user-info {
-            font-size: 14px;
-        }
-        
-        .system-menu {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .system-menu a {
-            background-color: #2196F3;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            display: inline-block;
-        }
-        
-        .system-menu a:hover {
-            background-color: #1976D2;
-        }
-        
-        .logout-btn {
-            background-color: #dc3545 !important;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin: 20px 0;
-            color: #2196F3;
-            text-decoration: none;
-        }
+        /* Estilos para las tablas que genera tabla.php */
+        .nivel { background: #e3f2fd; padding: 10px; border-left: 5px solid #2196F3; margin-top: 20px; }
+        .promedio-general { background: #e8f5e9; padding: 10px; margin-bottom: 15px; font-weight: bold; text-align: right; color: #2e7d32; }
+        .semestre { margin-top: 15px; border: 1px solid #ddd; background: white; padding: 15px; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #4CAF50; color: white; padding: 8px; text-align: left; }
+        td { padding: 8px; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
+
     <div class="system-header">
         <div>
             <h2 style="margin: 0;">📚 Sistema Escolar</h2>
-            <div class="user-info">
-                👤 <?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Usuario'); ?> 
-                | 📋 <?php echo ucfirst($_SESSION['tipo'] ?? 'invitado'); ?>
-            </div>
+            <small>👤 <?php echo $nombre; ?> | Boleta: <?php echo $boleta; ?></small>
         </div>
-        <div>
-            <a href="logout.php" class="logout-btn" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">🚪 Cerrar Sesión</a>
-        </div>
+        <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
-    
-    <!-- Menú de navegación -->
+
     <div class="system-menu">
-        <a href="home.php">🏠 Inicio</a>
+        <a href="index.php">🏠 Inicio</a>
         <a href="horario.php">📅 Horario</a>
         <a href="calif.php" style="background: #4CAF50;">📊 Calificaciones</a>
         <a href="informacion.php">✉️ Contactar Escuela</a>
-        <a href="emergencia.php">🚨 Contacto Emergencia</a>
+        <a href="contacto.php">🚨 Contacto Emergencia</a>
     </div>
-    
+
     <div class="container">
-        <!-- Tu contenido actual de calificaciones -->
-        <header>
-            <h1>📊 Calificaciones del Alumno</h1>
-        </header>
+        <h1>Historial Académico</h1>
         
-        <main>
-            <section>
-                <article>
-                    <?php
-                    require('tabla.php');
-                    ?>
-                </article>
-            </section>
-        </main>
+        <?php 
+        // Aquí incluimos la lógica de la tabla
+        require('tabla.php'); 
+        ?>
         
-        <a href="index.php" class="back-link">⬅ Volver al Inicio</a>
-        
-        <footer>
-            <p><strong>Sistema Escolar © 2024</strong></p>
-        </footer>
+        <br>
+        <a href="index.php" style="color: #2196F3; text-decoration: none;">⬅ Volver al Inicio</a>
     </div>
+
 </body>
 </html>
