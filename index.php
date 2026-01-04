@@ -2,14 +2,11 @@
 session_start();
 include 'conexion.php';
 
-// --- CORRECCIÓN PRINCIPAL ---
-// Validamos si la variable 'autenticado' NO está definida o es falsa.
-// Ya no usamos 'usuario_id' porque tu nuevo login no la crea.
 if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
     header('Location: inicias.php');
     exit();
 }
-// ----------------------------
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +23,6 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
         .stats { display: flex; gap: 20px; flex-wrap: wrap; }
         .stat-box { flex: 1; min-width: 200px; text-align: center; padding: 20px; background: #e3f2fd; border-radius: 5px; }
         
-        /* Estilos para el mensaje de bienvenida */
         .welcome-section { margin-top: 10px; }
         .welcome-message { font-size: 1.2em; font-weight: bold; }
     </style>

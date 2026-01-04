@@ -1,14 +1,10 @@
 <?php
-// Incluimos la conexión creada por el instalador
 require 'conexion.php';
 
-// Iniciamos sesión para verificar si ya ingresó
-// Usamos session_status para evitar errores si conexion.php ya intentó algo
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Si ya está autenticado, mandar al index
 if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
     header('Location: index.php');
     exit();
@@ -140,12 +136,10 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
             <?php
             if (isset($_POST['login'])) 
             {
-                // Obtenemos los datos del formulario
+
                 $boleta = $_POST['boleta'];
                 $password_input = $_POST['contraseña'];
 
-                // Intentamos usar la función que creó el instalador en conexion.php
-                // Esta función verifica boleta, password y crea las sesiones
                 if (function_exists('verificarUsuario')) {
                     $loginExitoso = verificarUsuario($boleta, $password_input);
                     
@@ -157,10 +151,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
                         echo "<div class='error'>❌ Boleta o contraseña incorrecta.</div>";
                     }
                 } 
-                // RESPALDO MANUAL: Si por alguna razón la función no existe, hacemos la consulta manual
-                // respetando la estructura de tablas de tu instalador
                 else {
-                    // Consulta uniendo usuarios y alumnos para obtener el nombre
                     $sql = "SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel 
                             FROM usuarios u 
                             LEFT JOIN alumnos a ON u.boleta = a.boleta 
@@ -171,7 +162,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
                     if ($resultado && $resultado->num_rows > 0) {
                         $usuario = $resultado->fetch_assoc();
                         
-                        // Verificamos contraseña (texto plano según tu instalador)
+                        // Verificar contraseña
                         if ($usuario['password'] === $password_input) {
                             $_SESSION['boleta'] = $usuario['boleta'];
                             $_SESSION['nombre'] = $usuario['nombre'] . " " . $usuario['apellidos'];
