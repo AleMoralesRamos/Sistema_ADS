@@ -2,17 +2,13 @@
 session_start();
 include 'conexion.php';
 
-// 1. SEGURIDAD: Si no está autenticado, lo sacamos
 if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
     header('Location: inicias.php');
     exit();
 }
 
-// 2. ID DEL USUARIO: Usamos la boleta de la sesión
 $id_usuario = $_SESSION['boleta'];
 
-// --- AUTO-CORRECCIÓN: CREAR TABLA SI NO EXISTE ---
-// Esto evitará la pantalla blanca si la tabla falta
 $sql_tabla = "CREATE TABLE IF NOT EXISTS contactos_emergencia (
     id INT(11) NOT NULL AUTO_INCREMENT,
     id_usuario BIGINT(20) NOT NULL,
@@ -24,7 +20,6 @@ $sql_tabla = "CREATE TABLE IF NOT EXISTS contactos_emergencia (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(boleta) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 $conn->query($sql_tabla);
-// --------------------------------------------------
 
 $mensaje = '';
 $tipo_mensaje = '';
@@ -47,7 +42,6 @@ $MSG8 = '✅ Contacto eliminado';
 
 $limite_contactos = 5;
 
-// Lógica de búsqueda
 if (isset($_GET['buscar']) && !empty($_GET['busqueda'])) 
 {
     $busqueda = $conn->real_escape_string($_GET['busqueda']);
@@ -65,7 +59,6 @@ else
 
 $result = $conn->query($sql);
 
-// Evitamos error fatal si la consulta falla
 if ($result) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -123,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         }
         
         if ($conn->query($sql) === TRUE) {
-            // Recargar para limpiar POST
             echo "<meta http-equiv='refresh' content='0;url=contacto.php?msg=guardado'>";
             exit();
         } else {
@@ -178,7 +170,6 @@ if (isset($_GET['copiar']))
     }
 }
 
-// Contar total
 $total_contactos = 0;
 $sql_count = "SELECT COUNT(*) as total FROM contactos_emergencia WHERE id_usuario = '$id_usuario'";
 $result_count = $conn->query($sql_count);
@@ -187,7 +178,6 @@ if ($result_count) {
     $total_contactos = $row_count['total'];
 }
 
-// Mensajes GET
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] == 'guardado') {
         $mensaje = $MSG1;
@@ -368,7 +358,6 @@ if (isset($_GET['msg'])) {
     </div>
 
     <script>
-        // Validación del teléfono
         document.getElementById('telefono')?.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length < 10) {

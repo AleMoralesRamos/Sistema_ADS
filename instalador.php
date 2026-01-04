@@ -1,11 +1,9 @@
 <?php
-// Configuración básica
 $host = 'localhost';
 $user = 'root';
 $pass = '';
 $dbname = 'sistema_escolar';  
 
-// Estilos
 echo "<!DOCTYPE html>
 <html>
 <head>
@@ -41,7 +39,6 @@ if ($conn->query("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 
     die("<div class='error'>❌ Error creando base de datos</div>");
 }
 
-// SQL embebido directamente en el código
 $sql_queries = [
     "DROP TABLE IF EXISTS kardex",
     "DROP TABLE IF EXISTS alumnos",
@@ -103,7 +100,7 @@ $sql_queries = [
     ('S204', 'Secundaria', 2, 'Tecnología'),
     ('S205', 'Secundaria', 3, 'Formación Cívica')",
     
-    // Insertar usuarios TODOS CON CONTRASEÑAS NORMALES (texto plano)
+    // Insertar usuarios 
     "INSERT INTO usuarios (boleta, password) VALUES
     (2023630289, 'pepito1'),
     (2023630290, 'pepito2'),
@@ -156,7 +153,7 @@ foreach ($sql_queries as $index => $sql) {
     }
 }
 
-// Mostrar resultados
+// Mostrar 
 echo "<div class='success'>✅ Ejecutadas $success_count consultas de " . count($sql_queries) . "</div>";
 
 if (!empty($errors)) {
@@ -166,7 +163,6 @@ if (!empty($errors)) {
     }
 }
 
-// Crear archivo de conexión CORREGIDO
 $conexion_content = '<?php
 // Conexión a proyectoe2 - CONTRASEÑAS NORMALES
 $host = "localhost";
@@ -193,7 +189,6 @@ function verificarUsuario($boleta, $password_input) {
     
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
-        // COMPARACIÓN DIRECTA - CONTRASEÑAS NORMALES
         if ($usuario["password"] === $password_input) {
             session_start();
             $_SESSION["boleta"] = $usuario["boleta"];
@@ -225,8 +220,7 @@ foreach ($tables as $table) {
         echo "<div class='error'>❌ Error accediendo a tabla $table</div>";
     }
 }
-
-// Mostrar usuarios creados para referencia
+//Usuarios creados
 echo "<h3>👥 Usuarios creados:</h3>";
 $result = $conn->query("SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel 
                        FROM usuarios u 

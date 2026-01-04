@@ -4,22 +4,21 @@ function cntRenglon($datos) {
     $materia         = $datos['materia'] ?? '';
     $periodo         = $datos['periodo'] ?? '-';
     $formaEvaluacion = $datos['forma_evaluacion'] ?? '-';
-    $calificacion    = $datos['calificacion']; // Puede ser null
+    $calificacion    = $datos['calificacion']; 
     
-    // Lógica del estado visual
     $estado = 'Sin cursar';
-    $color_estado = '#999'; // Gris por defecto
+    $color_estado = '#999'; 
     $fondo_calif = 'transparent';
 
     if ($calificacion !== null && $calificacion !== '') {
         if ($calificacion >= 6) {
             $estado = 'Aprobada';
             $color_estado = 'green';
-            $fondo_calif = '#e8f5e9'; // Verde clarito
+            $fondo_calif = '#e8f5e9'; 
         } else {
             $estado = 'Reprobada';
             $color_estado = 'red';
-            $fondo_calif = '#ffebee'; // Rojo clarito
+            $fondo_calif = '#ffebee'; 
         }
         $calif_display = $calificacion;
     } else {

@@ -24,7 +24,6 @@ function verificarUsuario($boleta, $password_input) {
     
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
-        // COMPARACIÓN DIRECTA - CONTRASEÑAS NORMALES
         if ($usuario["password"] === $password_input) {
             session_start();
             $_SESSION["boleta"] = $usuario["boleta"];

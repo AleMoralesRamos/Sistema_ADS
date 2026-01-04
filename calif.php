@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// 1. Verificar seguridad
 if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
     header('Location: inicias.php');
     exit();
 }
 
-// 2. Definir variables de sesión para usarlas en los otros archivos
 $boleta = $_SESSION['boleta'];
 $nombre = $_SESSION['nombre'];
 $nivel_alumno = $_SESSION['nivel'];
@@ -27,7 +25,6 @@ $nivel_alumno = $_SESSION['nivel'];
         .system-menu a { background-color: #2196F3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-right: 10px; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* Estilos para las tablas que genera tabla.php */
         .nivel { background: #e3f2fd; padding: 10px; border-left: 5px solid #2196F3; margin-top: 20px; }
         .promedio-general { background: #e8f5e9; padding: 10px; margin-bottom: 15px; font-weight: bold; text-align: right; color: #2e7d32; }
         .semestre { margin-top: 15px; border: 1px solid #ddd; background: white; padding: 15px; border-radius: 5px; }
@@ -58,7 +55,6 @@ $nivel_alumno = $_SESSION['nivel'];
         <h1>Historial Académico</h1>
         
         <?php 
-        // Aquí incluimos la lógica de la tabla
         require('tabla.php'); 
         ?>
         

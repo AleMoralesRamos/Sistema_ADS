@@ -1,16 +1,11 @@
 <?php
-require_once('conexion.php'); // Usamos require_once para asegurar conexión
+require_once('conexion.php');
 require_once('fila.php');
 
 $materiasPorNivel = [];
 
-// Usamos la boleta que viene de calif.php (o de la sesión)
 $boleta_actual = $_SESSION['boleta'];
 
-/* CONSULTA CORREGIDA:
-   Traemos todas las materias y las unimos con el kardex 
-   PERO solo para el alumno logueado.
-*/
 $sql = "SELECT m.clave, m.materia, m.nivel, m.semestre, 
                k.calificacion, k.periodo, k.forma_evaluacion, k.estado 
         FROM materias m
@@ -20,12 +15,10 @@ $sql = "SELECT m.clave, m.materia, m.nivel, m.semestre,
 $result = $conn->query($sql);
 
 if ($result) {
-    /* Agrupar por nivel y semestre */
     while ($fila = $result->fetch_assoc()) {
         $nivel = $fila['nivel'];
         $semestre = $fila['semestre'];
         
-        // Guardamos la fila en el array multidimensional
         $materiasPorNivel[$nivel][$semestre][] = $fila;
     }
 }
@@ -36,13 +29,12 @@ if (empty($materiasPorNivel)) {
 } else {
     foreach ($materiasPorNivel as $nivel => $semestres) {
 
-        // === PROMEDIO GENERAL POR NIVEL ===
+        //Promedio general
         $sumaNivel = 0;
         $contadorNivel = 0;
 
         foreach ($semestres as $materias) {
             foreach ($materias as $fila) {
-                // Solo sumamos si tiene calificación y no es nula
                 if (isset($fila['calificacion']) && $fila['calificacion'] !== null && $fila['calificacion'] !== '') {
                     $sumaNivel += $fila['calificacion'];
                     $contadorNivel++;
@@ -62,7 +54,7 @@ if (empty($materiasPorNivel)) {
                 Promedio General del Nivel: <span>$promedioNivel</span>
               </div>";
 
-        // === TABLAS POR SEMESTRE ===
+        // Tabla por semestre
         foreach ($semestres as $semestre => $materias) {
 
             echo "<div class='semestre'>";
@@ -84,7 +76,6 @@ if (empty($materiasPorNivel)) {
             $contadorSemestre = 0;
 
             foreach ($materias as $fila) {
-                // Llamamos a la función de fila.php para dibujar el renglón
                 echo cntRenglon($fila);
 
                 if (isset($fila['calificacion']) && $fila['calificacion'] !== null && $fila['calificacion'] !== '') {
@@ -97,7 +88,6 @@ if (empty($materiasPorNivel)) {
                 ? number_format($sumaSemestre / $contadorSemestre, 2)
                 : '-';
 
-            // Fila de promedio del semestre
             echo "<tr style='background-color: #fafafa; font-weight: bold;'>
                     <td colspan='4' style='text-align:right;'>Promedio Semestre:</td>
                     <td colspan='2' style='color:rgb(0, 0, 0);'>$promedioSemestre</td>
