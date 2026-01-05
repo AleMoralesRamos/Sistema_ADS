@@ -39,6 +39,8 @@ if ($conn->query("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 
 }
 
 $sql_queries = [
+    "DROP TABLE IF EXISTS alumno_grupo",
+    "DROP TABLE IF EXISTS grupos",
     "DROP TABLE IF EXISTS contactos_emergencia", 
     "DROP TABLE IF EXISTS mensajes",
     "DROP TABLE IF EXISTS comunicacion",
@@ -63,6 +65,22 @@ $sql_queries = [
         apellidos VARCHAR(120) NOT NULL,
         nivel ENUM('Kinder','Primaria','Secundaria','Administrativo') DEFAULT NULL,
         FOREIGN KEY (boleta) REFERENCES usuarios(boleta) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE grupos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nivel ENUM('Kinder','Primaria','Secundaria') NOT NULL,
+        grado INT NOT NULL,
+        grupo VARCHAR(5) NOT NULL,
+        nombre VARCHAR(50) NOT NULL 
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE alumno_grupo (
+        boleta BIGINT(20) NOT NULL,
+        grupo_id INT NOT NULL,
+        PRIMARY KEY (boleta),
+        FOREIGN KEY (boleta) REFERENCES alumnos(boleta) ON DELETE CASCADE,
+        FOREIGN KEY (grupo_id) REFERENCES grupos(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
     //Crear tabla MATERIAS
@@ -185,6 +203,18 @@ $sql_queries = [
     (2023630297, 'Miguel', 'Ramírez', 'Secundaria'),
     (2023630298, 'Isabel', 'Torres', 'Kinder'),
     (9999999999, 'DIRECCIÓN', 'ESCOLAR', 'Administrativo')",
+
+    "INSERT INTO grupos (id, nivel, grado, grupo, nombre) VALUES
+    (1, 'Kinder', 3, 'A', '3° A Kinder'),
+    (2, 'Primaria', 1, 'B', '1° B Primaria'),
+    (3, 'Secundaria', 2, 'C', '2° C Secundaria'),
+    (4, 'Kinder', 2, 'A', '2° A Kinder')",
+
+    "INSERT INTO alumno_grupo (boleta, grupo_id) VALUES
+    (2023630289, 1),
+    (2023630290, 2), 
+    (2023630291, 3),
+    (2023630292, 4)",
     
     // Insertar kardex
     "INSERT INTO kardex (boleta, clave, calificacion, periodo, forma_evaluacion, estado) VALUES
@@ -247,10 +277,19 @@ $conn->set_charset("utf8mb4");
 
 function verificarUsuario($boleta, $password_input) {
     global $conn;
-    $stmt = $conn->prepare("SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel FROM usuarios u LEFT JOIN alumnos a ON u.boleta = a.boleta WHERE u.boleta = ?");
+    // Consulta con Triple JOIN para obtener el nombre del grupo
+    $sql = "SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel, g.nombre as nombre_grupo 
+            FROM usuarios u 
+            LEFT JOIN alumnos a ON u.boleta = a.boleta 
+            LEFT JOIN alumno_grupo ag ON a.boleta = ag.boleta
+            LEFT JOIN grupos g ON ag.grupo_id = g.id
+            WHERE u.boleta = ?";
+            
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $boleta);
     $stmt->execute();
     $result = $stmt->get_result();
+    
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
         if ($usuario["password"] === $password_input) {
@@ -258,6 +297,8 @@ function verificarUsuario($boleta, $password_input) {
             $_SESSION["boleta"] = $usuario["boleta"];
             $_SESSION["nombre"] = $usuario["nombre"] . " " . $usuario["apellidos"];
             $_SESSION["nivel"] = $usuario["nivel"];
+            // Guardamos el grupo en sesión (o "Sin Asignar" si es null)
+            $_SESSION["grado_grupo"] = $usuario["nombre_grupo"] ?? "Sin Asignar";
             $_SESSION["autenticado"] = true;
             return true;
         }
@@ -267,7 +308,7 @@ function verificarUsuario($boleta, $password_input) {
 ?>';
 
 if (file_put_contents('conexion.php', $conexion_content)) {
-    echo "<div class='success'>✅ Archivo conexion.php creado</div>";
+    echo "<div class='success'>✅ Archivo conexion.php creado y actualizado</div>";
 }
 
 $conn->close();

@@ -6,10 +6,19 @@ $conn->set_charset("utf8mb4");
 
 function verificarUsuario($boleta, $password_input) {
     global $conn;
-    $stmt = $conn->prepare("SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel FROM usuarios u LEFT JOIN alumnos a ON u.boleta = a.boleta WHERE u.boleta = ?");
+    // Consulta con Triple JOIN para obtener el nombre del grupo
+    $sql = "SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel, g.nombre as nombre_grupo 
+            FROM usuarios u 
+            LEFT JOIN alumnos a ON u.boleta = a.boleta 
+            LEFT JOIN alumno_grupo ag ON a.boleta = ag.boleta
+            LEFT JOIN grupos g ON ag.grupo_id = g.id
+            WHERE u.boleta = ?";
+            
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $boleta);
     $stmt->execute();
     $result = $stmt->get_result();
+    
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
         if ($usuario["password"] === $password_input) {
@@ -17,6 +26,8 @@ function verificarUsuario($boleta, $password_input) {
             $_SESSION["boleta"] = $usuario["boleta"];
             $_SESSION["nombre"] = $usuario["nombre"] . " " . $usuario["apellidos"];
             $_SESSION["nivel"] = $usuario["nivel"];
+            // Guardamos el grupo en sesión (o "Sin Asignar" si es null)
+            $_SESSION["grado_grupo"] = $usuario["nombre_grupo"] ?? "Sin Asignar";
             $_SESSION["autenticado"] = true;
             return true;
         }
