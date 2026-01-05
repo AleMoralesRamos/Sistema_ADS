@@ -163,6 +163,13 @@ $sql_queries = [
     (2023630289, 'pepito1', 'juan@correo.com'),
     (2023630290, 'pepito2', 'ana@correo.com'),
     (2023630291, 'pepito3', 'pedro@correo.com'),
+    (2023630292, 'pepito4', 'maria@correo.com'),
+    (2023630293, 'pepito5', 'carlos@correo.com'),
+    (2023630294, 'pepito6', 'laura@correo.com'),
+    (2023630295, 'pepito7', 'jorge@correo.com'),
+    (2023630296, 'pepito8', 'sofia@correo.com'),
+    (2023630297, 'pepito9', 'miguel@correo.com'),
+    (2023630298, 'pepito10', 'isabel@correo.com'),
     (9999999999, 'admin123', 'admin@escuela.com')",
     
     // Insertar alumnos
@@ -170,6 +177,13 @@ $sql_queries = [
     (2023630289, 'Juan', 'Pérez', 'Kinder'),
     (2023630290, 'Ana', 'López', 'Primaria'),
     (2023630291, 'Pedro', 'García', 'Secundaria'),
+    (2023630292, 'María', 'Rodríguez', 'Kinder'), 
+    (2023630293, 'Carlos', 'Martínez', 'Primaria'), 
+    (2023630294, 'Laura', 'Hernández', 'Secundaria'),
+    (2023630295, 'Jorge', 'González', 'Kinder'), 
+    (2023630296, 'Sofía', 'Sánchez', 'Primaria'),
+    (2023630297, 'Miguel', 'Ramírez', 'Secundaria'),
+    (2023630298, 'Isabel', 'Torres', 'Kinder'),
     (9999999999, 'DIRECCIÓN', 'ESCOLAR', 'Administrativo')",
     
     // Insertar kardex
