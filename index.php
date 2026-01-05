@@ -36,7 +36,6 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
                 <div class="welcome-message">
                     👋 ¡Hola, 
                     <?php 
-                    // Mostramos el nombre guardado en el login
                     if (isset($_SESSION['nombre'])) {
                         echo htmlspecialchars($_SESSION['nombre']);
                     } else {

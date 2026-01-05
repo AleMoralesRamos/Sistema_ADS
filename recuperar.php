@@ -6,15 +6,12 @@ $mensaje = '';
 $paso = 1;
 $boleta_recuperacion = '';
 
-// PROCESAR FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    // PASO 1: Verificar Boleta y Correo
     if (isset($_POST['verificar'])) {
         $boleta_input = trim($_POST['boleta']);
         $email_input = trim($_POST['email']);
         
-        // Buscamos si existe esa combinación
         $sql = "SELECT boleta FROM usuarios WHERE boleta = ? AND email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $boleta_input, $email_input);
@@ -22,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = $stmt->get_result();
         
         if ($res->num_rows > 0) {
-            // Datos correctos, pasamos al paso 2 (Cambiar contraseña)
             $paso = 2;
             $boleta_recuperacion = $boleta_input;
             $mensaje = "✅ Datos verificados. Ahora crea tu nueva contraseña.";
@@ -31,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     
-    // PASO 2: Guardar la nueva contraseña
     if (isset($_POST['cambiar_pass'])) {
         $boleta_final = $_POST['boleta_hidden'];
         $nueva_pass = $_POST['new_password'];
@@ -44,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             if ($stmt->execute()) {
                 $mensaje = "✅ ¡Contraseña actualizada exitosamente!";
-                $paso = 3; // Finalizado
+                $paso = 3; 
             } else {
                 $mensaje = "❌ Error al actualizar en la base de datos.";
-                $paso = 2; // Volver a intentar
+                $paso = 2;
                 $boleta_recuperacion = $boleta_final;
             }
         } else {

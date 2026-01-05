@@ -9,17 +9,6 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
 
 $id_usuario = $_SESSION['boleta'];
 
-$sql_tabla = "CREATE TABLE IF NOT EXISTS contactos_emergencia (
-    id INT(11) NOT NULL AUTO_INCREMENT,
-    id_usuario BIGINT(20) NOT NULL,
-    nombre_completo VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20) NOT NULL,
-    parentesco VARCHAR(50) NOT NULL,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(boleta) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
-$conn->query($sql_tabla);
 
 $mensaje = '';
 $tipo_mensaje = '';
