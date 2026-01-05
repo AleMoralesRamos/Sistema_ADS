@@ -58,7 +58,7 @@ if (empty($materiasPorNivel)) {
         foreach ($semestres as $semestre => $materias) {
 
             echo "<div class='semestre'>";
-            echo "<h3>📅 Semestre $semestre</h3>";
+            echo "<h3> Semestre $semestre</h3>";
             echo "<div class='table-wrapper'><table>";
 
             echo "<thead>
