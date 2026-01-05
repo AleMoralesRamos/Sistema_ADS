@@ -143,13 +143,24 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
                 if (function_exists('verificarUsuario')) {
                     $loginExitoso = verificarUsuario($boleta, $password_input);
                     
-                    if ($loginExitoso) {
-                        echo "<div class='success'>✅ Bienvenido, redirigiendo...</div>";
-                        echo "<meta http-equiv='refresh' content='1;url=index.php'>";
-                        exit();
-                    } else {
-                        echo "<div class='error'>❌ Boleta o contraseña incorrecta.</div>";
-                    }
+                   if (function_exists('verificarUsuario')) {
+    $loginExitoso = verificarUsuario($boleta, $password_input);
+    
+    if ($loginExitoso) {
+        $nombre = $_SESSION['nombre']; 
+        echo "<div class='success'>✅ Bienvenido $nombre, redirigiendo...</div>";
+        
+        if ($_SESSION['nivel'] == 'Administrativo') {
+            echo "<meta http-equiv='refresh' content='1;url=admin.php'>";
+        } 
+        else {
+            echo "<meta http-equiv='refresh' content='1;url=index.php'>";
+        }
+        exit();
+    } else {
+        echo "<div class='error'>❌ Boleta o contraseña incorrecta.</div>";
+    }
+}
                 } 
                 else {
                     $sql = "SELECT u.boleta, u.password, a.nombre, a.apellidos, a.nivel 
