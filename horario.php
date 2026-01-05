@@ -30,7 +30,7 @@ $res_cal = $conn->query($cons_cal);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horario y Calendario</title>
-    <link rel="stylesheet" href="./css/estilo3.css"> 
+    <link rel="stylesheet" href="estilo3.css"> 
     <style>
         body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; }
         

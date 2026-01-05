@@ -53,7 +53,8 @@ $sql_queries = [
     // 3. Crear tabla USUARIOS
     "CREATE TABLE usuarios (
         boleta BIGINT(20) NOT NULL PRIMARY KEY,
-        password VARCHAR(255) NOT NULL
+        password VARCHAR(255) NOT NULL,
+        email VARCHAR(100) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     
     // 4. Crear tabla ALUMNOS
@@ -161,18 +162,18 @@ $sql_queries = [
     ('S205', 'Secundaria', 3, 'Formación Cívica')",
     
     // Insertar usuarios
-    "INSERT INTO usuarios (boleta, password) VALUES
-    (2023630289, 'pepito1'),
-    (2023630290, 'pepito2'),
-    (2023630291, 'pepito3'),
-    (2023630292, 'pepito4'),
-    (2023630293, 'pepito5'),
-    (2023630294, 'pepito6'),
-    (2023630295, 'pepito7'),
-    (2023630296, 'pepito8'),
-    (2023630297, 'pepito9'),
-    (2023630298, 'pepito10'),
-    (9999999999, 'admin123')",
+    "INSERT INTO usuarios (boleta, password, email) VALUES
+    (2023630289, 'pepito1', 'juan@correo.com'),
+    (2023630290, 'pepito2', 'ana@correo.com'),
+    (2023630291, 'pepito3', 'pedro@correo.com'),
+    (2023630292, 'pepito4', 'maria@correo.com'),
+    (2023630293, 'pepito5', 'carlos@correo.com'),
+    (2023630294, 'pepito6', 'laura@correo.com'),
+    (2023630295, 'pepito7', 'jorge@correo.com'),
+    (2023630296, 'pepito8', 'sofia@correo.com'),
+    (2023630297, 'pepito9', 'miguel@correo.com'),
+    (2023630298, 'pepito10', 'isabel@correo.com'),
+    (9999999999, 'admin123', 'admin@escuela.com')",
     
     // Insertar alumnos
     "INSERT INTO alumnos (boleta, nombre, apellidos, nivel) VALUES

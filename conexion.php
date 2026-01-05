@@ -1,4 +1,5 @@
 <?php
+// Conexión a sistema_escolar
 $host = "localhost";
 $username = "root";
 $password = "";

@@ -133,8 +133,8 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
             
             <button type="submit" name="login">🔐 Iniciar Sesión</button>
             <div style="margin-top: 15px; text-align: center;">
-    <a href="recuperar.php" style="color: #666; font-size: 14px; text-decoration: none;">¿Olvidaste tu contraseña?</a>
-</div>
+                <a href="recuperar.php" style="color: #666; font-size: 14px; text-decoration: none;">¿Olvidaste tu contraseña?</a>
+            </div>
             
             <?php
             if (isset($_POST['login'])) 
