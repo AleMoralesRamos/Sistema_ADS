@@ -89,27 +89,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
     <div class="system-header">
         <div>
-            <h2 style="margin: 0;">📚 Sistema Escolar</h2>
+            <h2 style="margin: 0;"> Sistema Escolar</h2>
             <small>👤 <?php echo $nombre_usuario; ?> | Boleta: <?php echo $boleta; ?></small>
         </div>
         <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
 
     <div class="system-menu">
-        <a href="index.php">🏠 Inicio</a>
-        <a href="horario.php">📅 Horario</a>
-        <a href="calif.php">📊 Calificaciones</a>
-        <a href="informacion.php" style="background: #4CAF50;">✉️ Contactar Escuela</a>
-        <a href="contacto.php">🚨 Contacto Emergencia</a>
+        <a href="index.php"> Inicio</a>
+        <a href="horario.php"> Horario</a>
+        <a href="calif.php"> Calificaciones</a>
+        <a href="informacion.php" style="background: #4CAF50;"> Contactar Escuela</a>
+        <a href="contacto.php"> Contacto Emergencia</a>
     </div>
 
     <div class="container">
-        <h1>✉️ Solicitar Información</h1>
+        <h1> Solicitar Información</h1>
         <p style="color: #666;">¿Tienes dudas sobre el rendimiento académico? Envía un mensaje directo al área correspondiente.</p>
 
         <?php if ($mensaje_enviado): ?>
             <div class="success">
-                <h3 style="margin: 0;">✅ ¡Mensaje enviado correctamente!</h3>
+                <h3 style="margin: 0;"> ¡Mensaje enviado correctamente!</h3>
                 <p>Pronto te responderemos. Tu solicitud ha sido registrada.</p>
             </div>
             <div style="text-align: center; margin-top: 20px;">
@@ -128,26 +128,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                 <label>¿A quién va dirigido?</label>
                 <select name="destinatario" required>
                     <option value="">-- Selecciona un destinatario --</option>
-                    <option value="Profesor">👨‍🏫 Al Profesor de Grupo</option>
-                    <option value="Administrativo">📋 A Control Escolar (Administración)</option>
-                    <option value="Director">👨‍💼 A Dirección</option>
-                    <option value="Psicologia">🧠 Departamento Psicopedagógico</option>
+                    <option value="Profesor"> Al Profesor de Grupo</option>
+                    <option value="Administrativo"> A Control Escolar (Administración)</option>
+                    <option value="Director"> A Dirección</option>
+                    <option value="Psicologia"> Departamento Psicopedagógico</option>
                 </select>
                 
                 <label>Asunto:</label>
                 <select name="asunto" required>
                     <option value="">-- Selecciona un asunto --</option>
-                    <option value="Progreso Académico">📊 Solicitar reporte de progreso</option>
-                    <option value="Justificante">🏥 Enviar justificante médico</option>
-                    <option value="Cita">🤝 Solicitar cita presencial</option>
-                    <option value="Dudas Pagos">💰 Aclaración de pagos</option>
-                    <option value="Otro">❓ Otro</option>
+                    <option value="Progreso Académico"> Solicitar reporte de progreso</option>
+                    <option value="Justificante"> Enviar justificante médico</option>
+                    <option value="Cita"> Solicitar cita presencial</option>
+                    <option value="Dudas Pagos"> Aclaración de pagos</option>
+                    <option value="Otro"> Otro</option>
                 </select>
                 
                 <label>Escribe tu mensaje detallado:</label>
                 <textarea name="mensaje" required placeholder="Hola, quisiera solicitar información sobre..."></textarea>
                 
-                <button type="submit">📤 Enviar Solicitud</button>
+                <button type="submit"> Enviar Solicitud</button>
             </form>
 
         <?php endif; ?>

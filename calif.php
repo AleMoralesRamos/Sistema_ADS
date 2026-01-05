@@ -86,25 +86,25 @@ $nivel_alumno = $_SESSION['nivel'];
 
     <div class="system-header">
         <div>
-            <h2 style="margin: 0;">📚 Sistema Escolar</h2>
-            <small>👤 <?php echo $nombre; ?> | Boleta: <?php echo $boleta; ?></small>
+            <h2 style="margin: 0;"> Sistema Escolar</h2>
+            <small> <?php echo $nombre; ?> | Boleta: <?php echo $boleta; ?></small>
         </div>
         <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
 
     <div class="system-menu">
-        <a href="index.php">🏠 Inicio</a>
-        <a href="horario.php">📅 Horario</a>
-        <a href="calif.php" style="background: #4CAF50;">📊 Calificaciones</a>
-        <a href="informacion.php">✉️ Contactar Escuela</a>
-        <a href="contacto.php">🚨 Contacto Emergencia</a>
+        <a href="index.php"> Inicio</a>
+        <a href="horario.php"> Horario</a>
+        <a href="calif.php" style="background: #4CAF50;"> Calificaciones</a>
+        <a href="informacion.php"> Contactar Escuela</a>
+        <a href="contacto.php"> Contacto Emergencia</a>
     </div>
 
     <div class="container">
         
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Historial Académico</h1>
-            <button onclick="generarPDF()" class="btn-pdf">📄 Descargar Boleta PDF</button>
+            <button onclick="generarPDF()" class="btn-pdf"> Descargar Boleta PDF</button>
         </div>
         
         <div id="area-imprimir">

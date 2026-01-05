@@ -110,24 +110,24 @@ $res_cal = $conn->query($cons_cal);
 
     <div class="system-header">
         <div>
-            <h2 style="margin: 0; border: none; color: white;">📅 Agenda Escolar</h2>
+            <h2 style="margin: 0; border: none; color: white;"> Agenda Escolar</h2>
             <small>👤 <?php echo $nombre; ?> | Nivel: <?php echo $nivel_alumno; ?> | <strong>Salón: <?php echo $grupo; ?></strong></small>
         </div>
         <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
 
     <div class="system-menu">
-        <a href="index.php">🏠 Inicio</a>
-        <a href="horario.php" style="background: #4CAF50;">📅 Horario</a>
-        <a href="calif.php">📊 Calificaciones</a>
-        <a href="informacion.php">✉️ Contactar Escuela</a>
-        <a href="contacto.php">🚨 Contacto Emergencia</a>
+        <a href="index.php"> Inicio</a>
+        <a href="horario.php" style="background: #4CAF50;"> Horario</a>
+        <a href="calif.php"> Calificaciones</a>
+        <a href="informacion.php"> Contactar Escuela</a>
+        <a href="contacto.php"> Contacto Emergencia</a>
     </div>
 
     <div class="contenedor-principal">
         
         <div class="columna">
-            <h2>⏰ Horario de Clases (<?php echo $grupo; ?>)</h2>
+            <h2>Horario de Clases (<?php echo $grupo; ?>)</h2>
             
             <?php if ($res_horario && $res_horario->num_rows > 0): ?>
                 <table>
@@ -145,7 +145,7 @@ $res_cal = $conn->query($cons_cal);
                                 <?php echo htmlspecialchars($clase['dia']); ?>
                             </td>
                             <td>
-                                🕒 <?php echo date('H:i', strtotime($clase['hora_inicio'])) . ' - ' . date('H:i', strtotime($clase['hora_fin'])); ?>
+                                 <?php echo date('H:i', strtotime($clase['hora_inicio'])) . ' - ' . date('H:i', strtotime($clase['hora_fin'])); ?>
                             </td>
                             <td>
                                 <strong><?php echo htmlspecialchars($clase['materia']); ?></strong>
@@ -164,7 +164,7 @@ $res_cal = $conn->query($cons_cal);
         </div>
 
         <div class="columna" style="max-width: 400px;">
-            <h2>📅 Próximos Eventos</h2>
+            <h2> Próximos Eventos</h2>
             
             <?php if ($res_cal && $res_cal->num_rows > 0): ?>
                 <div class="eventos-list">

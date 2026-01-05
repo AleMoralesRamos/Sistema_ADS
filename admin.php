@@ -19,20 +19,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sql_query'])) {
                 if ($result = $conn->store_result()) {
                     $resultado_consulta = $result->fetch_all(MYSQLI_ASSOC);
                     $result->free();
-                    $mensaje = "✅ Consulta SELECT ejecutada con éxito.";
+                    $mensaje = " Consulta SELECT ejecutada con éxito.";
                 } else {
                     if ($conn->errno) {
-                        $mensaje = "❌ Error: " . $conn->error;
+                        $mensaje = " Error: " . $conn->error;
                     } else {
-                        $mensaje = "✅ Comando ejecutado. Filas afectadas: " . $conn->affected_rows;
+                        $mensaje = "Comando ejecutado. Filas afectadas: " . $conn->affected_rows;
                     }
                 }
             } while ($conn->more_results() && $conn->next_result());
         } else {
-            $mensaje = "❌ Error SQL: " . $conn->error;
+            $mensaje = " Error SQL: " . $conn->error;
         }
     } catch (Exception $e) {
-        $mensaje = "❌ Excepción: " . $e->getMessage();
+        $mensaje = " Excepción: " . $e->getMessage();
     }
 }
 
@@ -95,12 +95,12 @@ while($row = $res->fetch_array()) {
 
     <div class="sidebar">
         <div class="sidebar-header">
-            🛠️ Admin Panel
+             Admin Panel
         </div>
         <div class="sidebar-menu">
             <small style="color: #6c757d; display: block; margin-bottom: 5px; font-weight: bold;">VER TABLAS:</small>
             <?php foreach($tablas as $tabla): ?>
-                <button onclick="cargarSQL('<?php echo $tabla; ?>')">📄 <?php echo $tabla; ?></button>
+                <button onclick="cargarSQL('<?php echo $tabla; ?>')"> <?php echo $tabla; ?></button>
             <?php endforeach; ?>
         </div>
         <div class="sidebar-footer">
@@ -113,7 +113,7 @@ while($row = $res->fetch_array()) {
     <div class="main">
         
         <div class="card">
-            <h2>💻 Consola SQL</h2>
+            <h2> Consola SQL</h2>
             <p style="color: #666; font-size: 0.9em;">Escribe tus consultas SQL aquí para administrar la base de datos (SELECT, INSERT, UPDATE, DELETE).</p>
             
             <?php if (!empty($mensaje)): ?>
@@ -133,7 +133,7 @@ while($row = $res->fetch_array()) {
 
         <?php if ($resultado_consulta): ?>
         <div class="card">
-            <h2>📊 Resultados</h2>
+            <h2> Resultados</h2>
             <div class="table-container">
                 <table>
                     <thead>
@@ -159,7 +159,7 @@ while($row = $res->fetch_array()) {
         <?php endif; ?>
         
         <div class="card">
-            <h3>💡 Comandos Útiles</h3>
+            <h3> Comandos Útiles</h3>
             <ul style="color: #555; font-size: 0.9em;">
                 <li><strong>Ver alumnos:</strong> <code>SELECT * FROM alumnos;</code></li>
                 <li><strong>Agregar Aviso:</strong> <code>INSERT INTO mensajes (emisor_boleta, receptor_boleta, asunto, contenido) VALUES (9999999999, 2023630289, 'Aviso', 'Texto del mensaje');</code></li>

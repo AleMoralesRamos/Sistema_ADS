@@ -20,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['contenido'])) {
     $stmtInsert->bind_param("ssss", $mi_boleta, $receptor_destino, $asunto, $contenido);
     
     if($stmtInsert->execute()){
-        echo "<script>alert('✅ Respuesta enviada correctamente');</script>";
+        echo "<script>alert(' Respuesta enviada correctamente');</script>";
         echo "<meta http-equiv='refresh' content='0'>"; 
     } else {
-        echo "<script>alert('❌ Error al enviar');</script>";
+        echo "<script>alert(' Error al enviar');</script>";
     }
 }
 ?>
@@ -112,18 +112,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['contenido'])) {
 
     <div class="system-header">
         <div>
-            <h2 style="margin: 0;">📩 Bandeja de Entrada</h2>
-            <small>👤 <?php echo $mi_nombre; ?> | Boleta: <?php echo $mi_boleta; ?></small>
+            <h2 style="margin: 0;"> Bandeja de Entrada</h2>
+            <small> <?php echo $mi_nombre; ?> | Boleta: <?php echo $mi_boleta; ?></small>
         </div>
         <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
 
     <div class="system-menu">
-        <a href="index.php">🏠 Inicio</a>
-        <a href="horario.php">📅 Horario</a>
-        <a href="calif.php">📊 Calificaciones</a>
-        <a href="informacion.php">✉️ Contactar Escuela</a>
-        <a href="mensaje_situacion.php" style="background: #4CAF50;">📩 Mis Mensajes</a>
+        <a href="index.php">Inicio</a>
+        <a href="horario.php"> Horario</a>
+        <a href="calif.php"> Calificaciones</a>
+        <a href="informacion.php"> Contactar Escuela</a>
+        <a href="mensaje_situacion.php" style="background: #4CAF50;">Mis Mensajes</a>
     </div>
 
     <div class="container">
@@ -189,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['contenido'])) {
                         <label><strong>Tu respuesta:</strong></label>
                         <textarea name="contenido" rows="3" placeholder="Escribe tu respuesta aquí..." required></textarea>
                         
-                        <button type="submit" class="btn-enviar">✈️ Enviar Respuesta</button>
+                        <button type="submit" class="btn-enviar"> Enviar Respuesta</button>
                     </form>
                 </div>
             </div>

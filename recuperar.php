@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($res->num_rows > 0) {
             $paso = 2;
             $boleta_recuperacion = $boleta_input;
-            $mensaje = "✅ Datos verificados. Ahora crea tu nueva contraseña.";
+            $mensaje = " Datos verificados. Ahora crea tu nueva contraseña.";
         } else {
-            $mensaje = "❌ Error: La boleta o el correo no coinciden.";
+            $mensaje = " Error: La boleta o el correo no coinciden.";
         }
     }
     
@@ -38,15 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("ss", $nueva_pass, $boleta_final);
             
             if ($stmt->execute()) {
-                $mensaje = "✅ ¡Contraseña actualizada exitosamente!";
+                $mensaje = " ¡Contraseña actualizada exitosamente!";
                 $paso = 3; 
             } else {
-                $mensaje = "❌ Error al actualizar en la base de datos.";
+                $mensaje = " Error al actualizar en la base de datos.";
                 $paso = 2;
                 $boleta_recuperacion = $boleta_final;
             }
         } else {
-            $mensaje = "❌ Las contraseñas no coinciden o están vacías.";
+            $mensaje = " Las contraseñas no coinciden o están vacías.";
             $paso = 2;
             $boleta_recuperacion = $boleta_final;
         }
@@ -75,10 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 
     <div class="card">
-        <h2>🔐 Recuperar Acceso</h2>
+        <h2> Recuperar Acceso</h2>
 
         <?php if (!empty($mensaje)): ?>
-            <div class="msg <?php echo strpos($mensaje, '❌') !== false ? 'error' : 'success'; ?>">
+            <div class="msg <?php echo strpos($mensaje) !== false ? 'error' : 'success'; ?>">
                 <?php echo $mensaje; ?>
             </div>
         <?php endif; ?>

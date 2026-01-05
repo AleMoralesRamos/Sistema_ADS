@@ -30,11 +30,11 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
 <body>
     <div class="container">
         <header>
-            <h1>📚 Sistema de Gestión Escolar</h1>
+            <h1> Sistema de Gestión Escolar</h1>
             <p>Bienvenido al sistema de seguimiento académico</p>
             <div class="welcome-section">
                 <div class="welcome-message">
-                    👋 ¡Hola, 
+                     ¡Hola padre de
                     <?php 
                     if (isset($_SESSION['nombre'])) {
                         echo htmlspecialchars($_SESSION['nombre']);
@@ -46,38 +46,38 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
             </div> </header>
         
         <div class="menu">
-            <a href="index.php">🏠 Inicio</a>
-            <a href="horario.php">📅 Horario</a>
-            <a href="calif.php">📊 Calificaciones</a>
-            <a href="informacion.php">✉️ Contactar Escuela</a>
-            <a href="contacto.php">🚨 Contactos Emergencia</a>
-            <a href="mensaje_situaciones.php">📩 Incidencias</a>
-            <a href="logout.php" style="background-color: #dc3545;">🚪 Cerrar Sesión</a>
+            <a href="index.php"> Inicio</a>
+            <a href="horario.php"> Horario</a>
+            <a href="calif.php"> Calificaciones</a>
+            <a href="informacion.php"> Contactar Escuela</a>
+            <a href="contacto.php"> Contactos Emergencia</a>
+            <a href="mensaje_situaciones.php"> Incidencias</a>
+            <a href="logout.php" style="background-color: #dc3545;"> Cerrar Sesión</a>
         </div>
         
         <div class="card">
             <h2>Resumen del Sistema</h2>
             <div class="stats">
                 <div class="stat-box">
-                    <h3>📅</h3>
+                    <h3></h3>
                     <h4>Horario Semanal</h4>
                     <p>Consulta las clases de la semana</p>
                     <a href="horario.php" style="color: #2196F3; text-decoration: none; font-weight: bold;">Ver Horario</a>
                 </div>
                 <div class="stat-box">
-                    <h3>📝</h3>
+                    <h3></h3>
                     <h4>Eventos</h4>
                     <p>Próximas actividades escolares</p>
                     <a href="horario.php#eventos" style="color: #2196F3; text-decoration: none; font-weight: bold;">Ver Eventos</a>
                 </div>
                 <div class="stat-box">
-                    <h3>✉️</h3>
+                    <h3></h3>
                     <h4>Comunicación</h4>
                     <p>Contacta con la escuela</p>
                     <a href="informacion.php" style="color: #2196F3; text-decoration: none; font-weight: bold;">Enviar Mensaje</a>
                 </div>
                 <div class="stat-box">
-                    <h3>🚨</h3>
+                    <h3></h3>
                     <h4>Emergencia</h4>
                     <p>Agrega un contacto</p>
                     <a href="contacto.php" style="color: #2196F3; text-decoration: none; font-weight: bold;">Gestionar</a>

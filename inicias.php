@@ -121,7 +121,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
     </style>
 </head>
 <body>
-    <h1>📚 Sistema Escolar - Iniciar Sesión</h1>
+    <h1> Sistema Escolar - Iniciar Sesión</h1>
     
     <div class="form-container">
         <form action="" method="POST">
@@ -131,7 +131,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
             <label for="contraseña">Contraseña:</label>
             <input type="password" id="contraseña" name="contraseña" required placeholder="Ingresa tu contraseña">
             
-            <button type="submit" name="login">🔐 Iniciar Sesión</button>
+            <button type="submit" name="login"> Iniciar Sesión</button>
             <div style="margin-top: 15px; text-align: center;">
                 <a href="recuperar.php" style="color: #666; font-size: 14px; text-decoration: none;">¿Olvidaste tu contraseña?</a>
             </div>
@@ -151,7 +151,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
     
     if ($loginExitoso) {
         $nombre = $_SESSION['nombre']; 
-        echo "<div class='success'>✅ Bienvenido $nombre, redirigiendo...</div>";
+        echo "<div class='success'> Bienvenido $nombre, redirigiendo...</div>";
         
         if ($_SESSION['nivel'] == 'Administrativo') {
             echo "<meta http-equiv='refresh' content='1;url=admin.php'>";
@@ -161,7 +161,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
         }
         exit();
     } else {
-        echo "<div class='error'>❌ Boleta o contraseña incorrecta.</div>";
+        echo "<div class='error'> Boleta o contraseña incorrecta.</div>";
     }
 }
                 } 
@@ -183,14 +183,14 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === true) {
                             $_SESSION['nivel'] = $usuario['nivel'];
                             $_SESSION['autenticado'] = true;
                             
-                            echo "<div class='success'>✅ Bienvenido " . $usuario['nombre'] . "</div>";
+                            echo "<div class='success'> Bienvenido " . $usuario['nombre'] . "</div>";
                             echo "<meta http-equiv='refresh' content='1;url=index.php'>";
                             exit();
                         } else {
-                            echo "<div class='error'>❌ Contraseña incorrecta.</div>";
+                            echo "<div class='error'>Contraseña incorrecta.</div>";
                         }
                     } else {
-                        echo "<div class='error'>❌ La boleta no existe.</div>";
+                        echo "<div class='error'> La boleta no existe.</div>";
                     }
                 }
                 

@@ -20,14 +20,14 @@ $telefono = '';
 $parentesco = '';
 $id_contacto = 0;
 
-$MSG1 = '✅ Contacto guardado correctamente';
-$MSG2 = '⚠️ Datos incompletos';
-$MSG3 = '❌ Nombre obligatorio';
-$MSG4 = '❌ Teléfono no válido (mínimo 10 dígitos)';
-$MSG5 = '❌ Límite de contactos alcanzado (máximo 5)';
-$MSG6 = '❌ Ya existe este contacto';
+$MSG1 = ' Contacto guardado correctamente';
+$MSG2 = ' Datos incompletos';
+$MSG3 = ' Nombre obligatorio';
+$MSG4 = ' Teléfono no válido (mínimo 10 dígitos)';
+$MSG5 = ' Límite de contactos alcanzado (máximo 5)';
+$MSG6 = ' Ya existe este contacto';
 $MSG7 = '¿Estás seguro de eliminar este contacto?';
-$MSG8 = '✅ Contacto eliminado';
+$MSG8 = ' Contacto eliminado';
 
 $limite_contactos = 5;
 
@@ -220,13 +220,13 @@ if (isset($_GET['msg'])) {
 </head>
 <body>
     <div class="container">
-        <h1>🚨 Gestión de Contactos de Emergencia</h1>
+        <h1> Gestión de Contactos de Emergencia</h1>
         
         <div class="nav">
-            <a href="index.php">🏠 Inicio</a>
-            <a href="horario.php">📅 Horario</a>
-            <a href="informacion.php">✉️ Contactar Escuela</a>
-            <a href="contacto.php" class="emergencia">🚨 Contacto Emergencia</a>
+            <a href="index.php"> Inicio</a>
+            <a href="horario.php"> Horario</a>
+            <a href="informacion.php"> Contactar Escuela</a>
+            <a href="contacto.php" class="emergencia"> Contacto Emergencia</a>
         </div>
         
         <?php if ($mensaje): ?>
@@ -236,9 +236,9 @@ if (isset($_GET['msg'])) {
         <?php endif; ?>
         
         <div class="limite-contactos">
-            📊 Contactos registrados: <span><?php echo $total_contactos; ?></span> de <?php echo $limite_contactos; ?> disponibles
+             Contactos registrados: <span><?php echo $total_contactos; ?></span> de <?php echo $limite_contactos; ?> disponibles
             <?php if ($total_contactos >= $limite_contactos): ?>
-                <br><small style="color: #dc3545;">⚠️ Has alcanzado el límite máximo de contactos</small>
+                <br><small style="color: #dc3545;"> Has alcanzado el límite máximo de contactos</small>
             <?php endif; ?>
         </div>
         
@@ -246,9 +246,9 @@ if (isset($_GET['msg'])) {
             <form method="GET" action="contacto.php">
                 <input type="text" name="busqueda" value="<?php echo htmlspecialchars($busqueda); ?>" 
                        placeholder="Buscar contacto por nombre...">
-                <button type="submit" name="buscar">🔍 Buscar</button>
+                <button type="submit" name="buscar"> Buscar</button>
                 <?php if ($busqueda): ?>
-                    <a href="contacto.php" style="margin-left: 10px;">❌ Limpiar búsqueda</a>
+                    <a href="contacto.php" style="margin-left: 10px;"> Limpiar búsqueda</a>
                 <?php endif; ?>
             </form>
         </div>
@@ -291,9 +291,9 @@ if (isset($_GET['msg'])) {
                 
                 <div class="botones">
                     <button type="submit" class="btn btn-guardar" name="guardar">
-                        💾 <?php echo ($id_contacto == 0) ? 'Guardar' : 'Actualizar'; ?>
+                         <?php echo ($id_contacto == 0) ? 'Guardar' : 'Actualizar'; ?>
                     </button>
-                    <a href="contacto.php" class="btn btn-cancelar">❌ Cancelar</a>
+                    <a href="contacto.php" class="btn btn-cancelar"> Cancelar</a>
                 </div>
             </form>
         </div>
@@ -302,13 +302,13 @@ if (isset($_GET['msg'])) {
         <?php if ($total_contactos < $limite_contactos && !isset($_GET['nuevo']) && $id_contacto == 0): ?>
         <div class="botones" style="margin: 20px 0;">
             <a href="contacto.php?nuevo=1" class="btn btn-nuevo">
-                ➕ Crear nuevo contacto
+                 Crear nuevo contacto
             </a>
         </div>
         <?php endif; ?>
         
         <div class="contactos-lista">
-            <h3>📋 Lista de Contactos de Emergencia</h3>
+            <h3> Lista de Contactos de Emergencia</h3>
             
             <?php if (empty($contactos)): ?>
                 <div class="mensaje-error">
@@ -322,22 +322,22 @@ if (isset($_GET['msg'])) {
                     <div class="contacto-item">
                         <div class="contacto-info">
                             <h4><?php echo htmlspecialchars($contacto['nombre_completo']); ?></h4>
-                            <p>📞 <?php echo htmlspecialchars($contacto['telefono']); ?> | 
-                               👨‍👩‍👧‍👦 <?php echo htmlspecialchars($contacto['parentesco']); ?> | 
-                               📅 <?php echo date('d/m/Y', strtotime($contacto['fecha_registro'])); ?></p>
+                            <p> <?php echo htmlspecialchars($contacto['telefono']); ?> | 
+                                <?php echo htmlspecialchars($contacto['parentesco']); ?> | 
+                                <?php echo date('d/m/Y', strtotime($contacto['fecha_registro'])); ?></p>
                         </div>
                         
                         <div class="contacto-acciones">
                             <a href="contacto.php?editar=<?php echo $contacto['id']; ?>" class="btn btn-actualizar">
-                                ✏️ Actualizar
+                                 Actualizar
                             </a>
                             <a href="contacto.php?copiar=<?php echo $contacto['id']; ?>" class="btn btn-copiar">
-                                📋 Copiar
+                                 Copiar
                             </a>
                             <a href="contacto.php?eliminar=<?php echo $contacto['id']; ?>" 
                                class="btn btn-eliminar"
                                onclick="return confirm('<?php echo $MSG7; ?>')">
-                                🗑️ Eliminar
+                                 Eliminar
                             </a>
                         </div>
                     </div>
