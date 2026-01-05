@@ -111,7 +111,7 @@ $res_cal = $conn->query($cons_cal);
     <div class="system-header">
         <div>
             <h2 style="margin: 0; border: none; color: white;"> Agenda Escolar</h2>
-            <small>👤 <?php echo $nombre; ?> | Nivel: <?php echo $nivel_alumno; ?> | <strong>Salón: <?php echo $grupo; ?></strong></small>
+            <small> <?php echo $nombre; ?> | Nivel: <?php echo $nivel_alumno; ?> | <strong>Salón: <?php echo $grupo; ?></strong></small>
         </div>
         <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
@@ -150,7 +150,7 @@ $res_cal = $conn->query($cons_cal);
                             <td>
                                 <strong><?php echo htmlspecialchars($clase['materia']); ?></strong>
                                 <br>
-                                <small style="color: #666;">👨‍🏫 <?php echo htmlspecialchars($clase['profesor']); ?></small>
+                                <small style="color: #666;"> <?php echo htmlspecialchars($clase['profesor']); ?></small>
                             </td>
                         </tr>
                         <?php endwhile; ?>
@@ -158,7 +158,7 @@ $res_cal = $conn->query($cons_cal);
                 </table>
             <?php else: ?>
                 <div class="mensaje-vacio">
-                    <p>📭 No hay horarios registrados para tu nivel educativo.</p>
+                    <p> No hay horarios registrados para tu nivel educativo.</p>
                 </div>
             <?php endif; ?>
         </div>
@@ -191,7 +191,7 @@ $res_cal = $conn->query($cons_cal);
                 </div>
             <?php else: ?>
                 <div class="mensaje-vacio">
-                    <p>✨ No hay eventos próximos en el calendario.</p>
+                    <p> No hay eventos próximos en el calendario.</p>
                 </div>
             <?php endif; ?>
         </div>

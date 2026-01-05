@@ -47,7 +47,7 @@ if (empty($materiasPorNivel)) {
             : '-';
 
         echo "<div class='nivel'>
-                <h2>🎓 Nivel Educativo: $nivel</h2>
+                <h2> Nivel Educativo: $nivel</h2>
               </div>";
 
         echo "<div class='promedio-general'>
