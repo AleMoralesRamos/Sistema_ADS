@@ -10,6 +10,7 @@ include 'conexion.php';
 
 $nivel_alumno = $_SESSION['nivel']; 
 $nombre = $_SESSION['nombre'];
+$grupo = $_SESSION['grado_grupo'] ?? 'Sin Asignar'; 
 
 $cons_horario = "SELECT * FROM horarios 
                  WHERE nivel = '$nivel_alumno'
@@ -67,13 +68,11 @@ $res_cal = $conn->query($cons_cal);
         
         h2 { border-bottom: 2px solid #4CAF50; padding-bottom: 10px; color: #2e7d32; margin-top: 0; }
         
-        /* Tabla de Horarios */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { background-color: #4CAF50; color: white; padding: 10px; text-align: left; }
         td { border-bottom: 1px solid #eee; padding: 10px; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         
-        /* Lista de Eventos */
         .eventos-list { list-style: none; padding: 0; }
         .evento-item { 
             padding: 15px; 
@@ -112,7 +111,7 @@ $res_cal = $conn->query($cons_cal);
     <div class="system-header">
         <div>
             <h2 style="margin: 0; border: none; color: white;">📅 Agenda Escolar</h2>
-            <small>👤 <?php echo $nombre; ?> | Nivel: <?php echo $nivel_alumno; ?></small>
+            <small>👤 <?php echo $nombre; ?> | Nivel: <?php echo $nivel_alumno; ?> | <strong>Salón: <?php echo $grupo; ?></strong></small>
         </div>
         <a href="logout.php" style="background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Cerrar Sesión</a>
     </div>
@@ -128,7 +127,7 @@ $res_cal = $conn->query($cons_cal);
     <div class="contenedor-principal">
         
         <div class="columna">
-            <h2>⏰ Horario de Clases (<?php echo $nivel_alumno; ?>)</h2>
+            <h2>⏰ Horario de Clases (<?php echo $grupo; ?>)</h2>
             
             <?php if ($res_horario && $res_horario->num_rows > 0): ?>
                 <table>
@@ -198,7 +197,10 @@ $res_cal = $conn->query($cons_cal);
         </div>
 
     </div>
-    <a href="index.php" style="color: #2196F3; text-decoration: none;">⬅ Volver al Inicio</a>
+    
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="index.php" style="color: #2196F3; text-decoration: none;">⬅ Volver al Inicio</a>
+    </div>
 
 </body>
 </html>
